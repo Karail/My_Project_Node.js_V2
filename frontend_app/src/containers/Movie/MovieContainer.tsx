@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import * as movieActions from '../../redux/list/movie/movie.action'
 
 import { Movie } from '../../components/Movie/Movie'
@@ -11,18 +11,19 @@ import { setMovieType } from '../../redux/list/movie/movie.type'
 import { setSearchQueryType } from '../../redux/list/filter/filter.type'
 
 import { rootReducerType } from '../../redux/list'
+import { match } from "react-router";
 
 type PropsType = {
   setMovie: (data: itemsMovieType) => setMovieType,
   serverURL: string,
   movie: itemsMovieType,
   setSearchQuery: (value: string) => setSearchQueryType,
-  match: any,
+  match: match<{ id: string }>,
 }
 
 
 class MovieContainer extends React.Component<PropsType> {
-  
+
   componentDidMount = async () => {
     try {
       const { setMovie, serverURL, match } = this.props;
@@ -52,7 +53,7 @@ const mapStateToProps = ({ movie }: rootReducerType) => ({
 });
 
 // передача action в компонент
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   ...bindActionCreators(movieActions, dispatch),
 })
 

@@ -7,12 +7,8 @@ const { getVideoDurationInSeconds } = require('get-video-duration')
 
 const sequelize = require('../../db/db.js')
 
+import IUserRequest from '../../intarface/IUserRequest';
 import AWS from '../abstract/AWS';
-
-interface IUserRequest extends Request {
-    user?: any
-    cookie?: any
-}
 
 const { Video, Comment, Subscriber, LikeSubscriber, DislikeSubscriber } = require('../../models/control.js')
 

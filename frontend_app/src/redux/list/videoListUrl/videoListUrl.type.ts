@@ -5,8 +5,8 @@ export type initialStateType = {
     url: string
 }
 
-export type updateListUrlType = {
+export type updateVideoListUrlType = {
     type: 'UPDATE_URL',
     payload: string
 }
-export type actionReturnType = updateListUrlType
+export type actionReturnType = updateVideoListUrlType

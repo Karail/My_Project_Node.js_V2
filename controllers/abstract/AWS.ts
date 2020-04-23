@@ -26,7 +26,7 @@ export default abstract class AWS {
             }
         })
 
-        return s3.upload(params).promise()
+        return s3.upload(params as any).promise()
 
     }
 
@@ -38,7 +38,7 @@ export default abstract class AWS {
         };
 
         return new Promise((resolve, reject) => {
-            s3.deleteObject(params, function (err: Error, data: any) {
+            s3.deleteObject(params, function (err, data) {
                 if (err)
                     return reject(err)
                 resolve(data)

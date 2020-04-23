@@ -1,14 +1,8 @@
 
 
 import { Request, Response } from 'express'
-const { MAINconf } = require('../../config/conf.js')
 const { Subscriber, Video } = require('../../models/control.js')
-
-interface IUserRequest extends Request {
-    user?: any
-    cookie?: any
-}
-
+import IUserRequest from '../../intarface/IUserRequest';
 
 class ViewUserController {
 

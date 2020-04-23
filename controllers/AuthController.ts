@@ -21,10 +21,12 @@ const transporter = nodemailer.createTransport(sendgrid({
     },
 }))
 
+import { TokenBodyType } from '../intarface/IUserRequest';
+
 
 class AuthController {
 
-    private createToken(body: any) {
+    private createToken(body: TokenBodyType) {
         return jsonwebtoken.sign(
             body,
             JWTconf.secretOrKey,

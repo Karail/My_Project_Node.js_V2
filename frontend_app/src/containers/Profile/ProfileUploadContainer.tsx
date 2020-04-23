@@ -10,13 +10,13 @@ type PropsType = {
 
 class ProfileUploadContainer extends React.Component<PropsType> {
 
-  uploadVideo = async (event: any) => {
+  uploadVideo = async (e: any) => {
     try {
-      event.preventDefault()
+      e.preventDefault()
 
       const { serverURL } = this.props;
 
-      const formData = new FormData(event.target)
+      const formData = new FormData(e.target)
 
       console.log('...');
 

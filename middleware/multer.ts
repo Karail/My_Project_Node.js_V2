@@ -4,17 +4,17 @@ import { Request } from 'express'
 import multer from 'multer'
 
 const storage = multer.diskStorage({
-  destination(req: Request, file: any, cb: any) {
+  destination(req, file, cb) {
     cb(null, 'uploads')
   },
-  filename(req: Request, file: any, cb: any) {
+  filename(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname)
   }
 })
 
 const allowedTypes = ['video/mp4']
 
-const fileFilter = (req: Request, file: any, cb: any) => {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {

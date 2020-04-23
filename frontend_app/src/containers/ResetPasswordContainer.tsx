@@ -4,9 +4,11 @@ import { ResetPassword } from '../components/ResetPassword'
 
 import { Redirect } from 'react-router'
 
+import { match } from "react-router";
+
 type PropsType = {
     serverURL: string,
-    match: any
+    match: match<{ token: string }>
 }
 
 class ResetPasswordContainer extends React.Component<PropsType> {
@@ -36,12 +38,12 @@ class ResetPasswordContainer extends React.Component<PropsType> {
         }
     }
 
-    resetPasswordForm = async (event: any) => {
+    resetPasswordForm = async (e: any) => {
         try {
-            event.preventDefault()
+            e.preventDefault()
             const { serverURL, match } = this.props
 
-            const formData = new FormData(event.target)
+            const formData = new FormData(e.target)
 
             formData.append('token', match.params.token)
 
@@ -50,7 +52,7 @@ class ResetPasswordContainer extends React.Component<PropsType> {
                 body: formData
             })
             const data = await response.json()
-            
+
             if (data.status === 0) {
                 return alert(data.message)
             }

@@ -4,7 +4,7 @@ import video from './video/video.reducer'
 import model from './model/model.reducer'
 import movie from './movie/movie.reducer'
 import filter from './filter/filter.reducer'
-import listUrl from './listUrl/listUrl.reducer';
+import listUrl from './videoListUrl/videoLstUrl.reducer';
 
 export const rootReducer = combineReducers({
     video,

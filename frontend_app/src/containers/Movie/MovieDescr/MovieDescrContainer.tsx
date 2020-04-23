@@ -4,7 +4,7 @@ import { MovieDescr } from '../../../components/Movie/MovieDescr/MovieDescr'
 import { getCookie } from '../../../func/cookie'
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import * as movieActions from '../../../redux/list/movie/movie.action'
 
 import { updateLikeDislikeType } from '../../../redux/list/movie/movie.type'
@@ -13,9 +13,11 @@ import { likeDislikeType } from '../../../type/movie.type';
 import { rootReducerType } from '../../../redux/list'
 import { itemsMovieType } from '../../../type/movie.type'
 
+import { match } from "react-router";
+
 type PropsType = {
     serverURL: string,
-    match: any,
+    match: match<{ id: string }>,
     movie: itemsMovieType,
     updateLikeDislike: (data: likeDislikeType) => updateLikeDislikeType
 }
@@ -64,7 +66,7 @@ const mapStateToProps = ({ movie }: rootReducerType) => ({
 });
 
 // передача action в компонент
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
     ...bindActionCreators(movieActions, dispatch),
 })
 

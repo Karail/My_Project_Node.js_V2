@@ -1,33 +1,34 @@
 
 
-import React from 'react'
+import React from 'react';
 
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as videoActions from '../redux/list/video/video.action'
-import * as listUrlActions from '../redux/list/listUrl/listUrl.action'
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import * as videoActions from '../redux/list/video/video.action';
+import * as listUrlActions from '../redux/list/videoListUrl/videoListUrl.action';
 
 import { playVideo, stopVideo } from '../func/actionVideo';
 
 import { rootReducerType } from '../redux/list'
 import { setVideoType, setNextVideoType } from '../redux/list/video/video.type';
 import { itemsVideoType } from '../type/video.type';
-import { updateListUrlType } from '../redux/list/listUrl/listUrl.type';
+import { updateVideoListUrlType } from '../redux/list/videoListUrl/videoListUrl.type';
 
-import { VideoList } from '../components/List/VideoList'
-import { VideoCard } from '../components/Card/VideoCard'
+import { VideoList } from '../components/List/VideoList';
+import { VideoCard } from '../components/Card/VideoCard';
 
+import { match } from "react-router";
 
 type PropsType = {
   setVideo: (data: itemsVideoType[]) => setVideoType,
   setNextVideo: (data: itemsVideoType[]) => setNextVideoType,
   serverURL: string,
   video: itemsVideoType[],
-  match: any,
+  match: match<{ id?: string }>,
   limit: number,
   tableName: string,
   nextUrl: string,
-  updateListUrl: (data: string) => updateListUrlType,
+  updateVideoListUrl: (data: string) => updateVideoListUrlType,
 }
 
 type dataType = {
@@ -39,7 +40,7 @@ class VideoListContainer extends React.Component<PropsType> {
 
   responseMiddleware = async (url = this.props.nextUrl) => {
     try {
-      const { serverURL, match, limit, tableName, updateListUrl } = this.props
+      const { serverURL, match, limit, tableName, updateVideoListUrl } = this.props
 
       if (!match.params.id) {
         match.params.id = ''
@@ -49,7 +50,7 @@ class VideoListContainer extends React.Component<PropsType> {
       const data: dataType = await response.json()
       console.log(data);
 
-      updateListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=${data.nextOffset}`)
+      updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=${data.nextOffset}`)
 
       const btn = document.querySelector('.main__next-btn') as HTMLElement
 
@@ -66,14 +67,14 @@ class VideoListContainer extends React.Component<PropsType> {
 
   componentDidMount = async () => {
     try {
-      const { serverURL, match, limit, tableName, updateListUrl } = this.props
+      const { serverURL, match, limit, tableName, updateVideoListUrl } = this.props
       const { setVideo } = this.props;
 
       if (!match.params.id) {
         match.params.id = ''
       }
 
-      const actionData: any = updateListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=0`)
+      const actionData = updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=0`)
 
       const data = await this.responseMiddleware(actionData.payload)
       setVideo(data)
@@ -114,7 +115,7 @@ const mapStateToProps = ({ video, listUrl }: rootReducerType) => ({
 });
 
 // передача action в компонент
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   ...bindActionCreators(videoActions, dispatch),
   ...bindActionCreators(listUrlActions, dispatch),
 })

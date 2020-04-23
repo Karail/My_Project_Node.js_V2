@@ -1,14 +1,10 @@
 
 
 
-import { Request, Response, NextFunction } from 'express'
-const { JWTconf } = require('../config/conf.js')
-import jwt, { JsonWebTokenError } from 'jsonwebtoken'
-
-interface IUserRequest extends Request {
-    user?: any
-    cookie?: any
-}
+import { Request, Response, NextFunction } from 'express';
+const { JWTconf } = require('../config/conf.js');
+import jwt from 'jsonwebtoken';
+import IUserRequest from '../intarface/IUserRequest';
 
 function ExtractJwt(req: Request) {
     let token = null

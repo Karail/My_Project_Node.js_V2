@@ -1,5 +1,5 @@
 
-import { initialStateType, actionReturnType } from './listUrl.type'
+import { initialStateType, actionReturnType } from './videoListUrl.type'
 
 const initialState: initialStateType = {
     isReady: false,

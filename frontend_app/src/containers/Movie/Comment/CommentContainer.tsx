@@ -9,19 +9,20 @@ import { addCommentType } from '../../../redux/list/movie/movie.type'
 import { itemsCommentType } from '../../../type/comment.type'
 import { itemsMovieType } from '../../../type/movie.type'
 
+import { match } from "react-router";
 
 type PropsType = {
   serverURL: string
-  match: any
+  match: match<{ id: string }>
   addComment: (data: itemsCommentType[]) => addCommentType
   movie: itemsMovieType,
 }
 
 class CommentContainer extends React.Component<PropsType> {
 
-  addCommentForm = async (event: any) => {
+  addCommentForm = async (e: any) => {
     try {
-      event.preventDefault()
+      e.preventDefault()
 
       if (!getCookie('token')) {
         alert('Войдите в систему')
@@ -29,7 +30,7 @@ class CommentContainer extends React.Component<PropsType> {
         const { serverURL, match, addComment } = this.props;
         const video_id = match.params.id
 
-        const formData = new FormData(event.target)
+        const formData = new FormData(e.target)
         formData.append('video_id', video_id)
 
         const response = await fetch(`${serverURL}/addComment`, {
@@ -55,12 +56,12 @@ class CommentContainer extends React.Component<PropsType> {
     }
   }
 
-  showAnswer = (event: any) => {
+  showAnswer = (e: any) => {
 
     const { comment } = this.props.movie
 
     comment.forEach((el) => {
-      if (el.comment_id == event.target.dataset.id) {
+      if (el.comment_id == e.target.dataset.id) {
 
       }
     })

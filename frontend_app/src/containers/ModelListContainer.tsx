@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, Dispatch } from 'redux'
 import * as modelActions from '../redux/list/model/model.action'
 import * as filterActions from '../redux/list/filter/filter.action'
 
@@ -79,7 +79,7 @@ const mapStateToProps = ({ model, filter }: rootReducerType) => ({
 });
 
 // передача action в компонент
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   ...bindActionCreators(modelActions, dispatch),
   ...bindActionCreators(filterActions, dispatch),
 })

@@ -1,5 +1,5 @@
-const cluster = require('cluster');
-const os = require('os');
+import cluster from 'cluster';
+import os from 'os';
 const pid = process.pid;
 
 if (cluster.isMaster) {
@@ -10,7 +10,7 @@ if (cluster.isMaster) {
         cluster.fork();
     }
 
-    cluster.on('exit', (worker: any, code: number) => {
+    cluster.on('exit', (worker, code: number) => {
         console.log(`Worker died, Pid: ${worker.process.pid}. Code ${code}`);
         if (code === 1) {
             cluster.fork();
