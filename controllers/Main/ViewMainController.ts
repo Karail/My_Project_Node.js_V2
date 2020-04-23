@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express'
 
-import ViewBaseFunc from '../collections/ViewFuncCollection';
+import ViewBaseFunc from '../abstract/ViewMethods';
 
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op;

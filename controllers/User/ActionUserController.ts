@@ -1,13 +1,13 @@
 
 import { Request, Response } from 'express'
 import path from 'path';
-import fs from 'fs';
-import s3 from '../../middleware/aws';
+import FileMethods from '../abstract/FileMethods';
 import ffmpeg from 'ffmpeg'
 const { getVideoDurationInSeconds } = require('get-video-duration')
 
-const { MAINconf, AWSconf } = require('../../config/conf.js')
 const sequelize = require('../../db/db.js')
+
+import AWS from '../abstract/AWS';
 
 interface IUserRequest extends Request {
     user?: any
@@ -263,43 +263,6 @@ class ActionUserController {
         }
     }
 
-    //!Перенести в другой класс
-    awsParamsFile(staticPath: string, iFile: string, mimetype: string, folderName: string) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(staticPath, async (err, data) => {
-                if (err)
-                    return reject(err)
-                const params = {
-                    Bucket: AWSconf.bucketName + folderName,
-                    Key: iFile,
-                    Body: data,
-                    ContentType: mimetype,
-                    ACL: 'public-read',
-                }
-                resolve(params)
-            })
-        })
-    }
-    //!Перенести в другой класс
-    deleteFile(filePath: string) {
-        return new Promise((reslove, reject) => {
-            fs.unlink(filePath, (err) => {
-                if (err) return reject(err)
-                reslove(true)
-            });
-        })
-    }
-
-    awsDeleteFile(params: any) {
-        return new Promise((resolve, reject) => {
-            s3.deleteObject(params, function (err: Error, data: any) {
-                if (err)
-                    return reject(err)
-                resolve(data)
-            })
-        })
-    }
-
     async uploadVideo(req: IUserRequest, res: Response) {
 
         const filePath = path.join(__dirname, '..', '..', req.file.path)
@@ -326,15 +289,9 @@ class ActionUserController {
                     });
             })
 
-            const paramsVideo = await this.awsParamsFile(filePath, req.file.filename, req.file.mimetype, '/video')
+            const videoAWS = await AWS.awsUploadFile(filePath, req.file.filename, req.file.mimetype, '/video')
 
-            const paramsPreview = await this.awsParamsFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
-
-            const videoAWS = await s3.upload(paramsVideo).promise()
-
-            const previewAWS = await s3.upload(paramsPreview).promise()
-
-            console.log(previewAWS)
+            const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
 
             await Video.create({
                 name,
@@ -352,8 +309,8 @@ class ActionUserController {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })
         } finally {
-            await this.deleteFile(filePath)
-            await this.deleteFile(filePathPreview)
+            await FileMethods.deleteFile(filePath)
+            await FileMethods.deleteFile(filePathPreview)
         }
 
     }
@@ -371,16 +328,6 @@ class ActionUserController {
                 }
             })
 
-            const paramsVideo = {
-                Bucket: AWSconf.bucketName + '/video',
-                Key: videoItems.fileName
-            };
-
-            const paramsPreview = {
-                Bucket: AWSconf.bucketName + '/video/preview',
-                Key: videoItems.fileName
-            };
-
             await Comment.destroy({
                 where: {
                     video_id,
@@ -397,16 +344,16 @@ class ActionUserController {
                 }
             })
 
-            await this.awsDeleteFile(paramsVideo)
-
-            await this.awsDeleteFile(paramsPreview)
-
             await Video.destroy({
                 where: {
                     id: video_id,
                     user_id
                 }
             })
+
+            await AWS.awsDeleteFile('/video', videoItems.fileName)
+
+            await AWS.awsDeleteFile('/video/preview', videoItems.fileName)
 
             const items = await Video.findAll({
                 order: [['id', 'DESC']],

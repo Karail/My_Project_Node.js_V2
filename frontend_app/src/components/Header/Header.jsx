@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { getCookie } from '../../func/cookie';
 
 export const Header = ({ logout, openProfile, openLogin, openRegister, openSearch }) => {
@@ -36,10 +35,10 @@ export const Header = ({ logout, openProfile, openLogin, openRegister, openSearc
                 <hr className="hr" />
                 <div className="header-category">
                     <ul className="header-category-list">
-                        <Link to={'/'}><li className="header-category-list__item">Видео</li></Link>
-                        <Link to={'/category'}><li className="header-category-list__item">Категории</li></Link>
-                        <Link to={'/model'}><li className="header-category-list__item">Модели</li></Link>
-                        <Link to={'/studio'}><li className="header-category-list__item">Студии</li></Link>
+                        <a href="/"><li className="header-category-list__item">Видео</li></a>
+                        <a href="/category"><li className="header-category-list__item">Категории</li></a>
+                        <a href="/model"><li className="header-category-list__item">Модели</li></a>
+                        <a href="/studio"><li className="header-category-list__item">Студии</li></a>
                     </ul>
                 </div>
                 <hr className="hr" />

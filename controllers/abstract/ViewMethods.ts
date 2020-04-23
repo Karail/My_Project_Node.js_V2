@@ -5,7 +5,7 @@ import { Request, Response } from 'express'
 const { Video } = require('../../models/control.js')
 
 
-class ViewBaseFunc {
+export default abstract class ViewBaseFunc {
 
     protected async resVideoOffset(req: Request, res: Response, thwoModel?: any, tableId?: any) {
         try {
@@ -69,5 +69,3 @@ class ViewBaseFunc {
         })
     }
 }
-
-export default ViewBaseFunc
