@@ -2,9 +2,15 @@ import React from 'react'
 
 import { PasswordModal } from '../../../components/Modal/Password/PasswordModal'
 
-class PasswordModalContainer extends React.Component {
+type PropsType = {
+    serverURL: string
+    closeModal: () => void
+    openLogin: () => void
+}
 
-    password = async (e) => {
+class PasswordModalContainer extends React.Component<PropsType> {
+
+    password = async (e: any) => {
         try {
             e.preventDefault()
             const { serverURL } = this.props
@@ -12,7 +18,6 @@ class PasswordModalContainer extends React.Component {
 
             const response = await fetch(`${serverURL}/password`, {
                 method: 'POST',
-                // credentials: 'same-origin',
                 body: formData,
             })
             console.log(response)

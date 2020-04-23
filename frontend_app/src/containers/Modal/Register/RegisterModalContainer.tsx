@@ -3,14 +3,20 @@ import React from 'react'
 import { RegisterModal } from '../../../components/Modal/Register/RegisterModal'
 import { setCookie } from '../../../func/cookie'
 
+type PropsType = {
+    serverURL: string
+    closeModal: () => void
+    openRegister: () => void
+    openLogin: () => void
+}
 
-class RegisterModalContainer extends React.Component {
+class RegisterModalContainer extends React.Component<PropsType> {
 
-    register = async (event) => {
+    register = async (e: any) => {
         try {
-            event.preventDefault()
+            e.preventDefault()
             const { serverURL } = this.props
-            const formData = new FormData(event.target)
+            const formData = new FormData(e.target)
 
             const response = await fetch(`${serverURL}/register`, {
                 method: 'POST',

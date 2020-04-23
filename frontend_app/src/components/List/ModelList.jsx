@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const SearchList = (props) => {
+export const ModelList = (props) => {
 
   const { items, setSearchQuery, Card } = props
 

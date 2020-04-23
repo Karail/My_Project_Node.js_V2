@@ -11,7 +11,7 @@ const Op = Sequelize.Op;
 
 const { Subscriber } = require('../models/control.js')
 
-import confJWT from '../middleware/passport'
+const { JWTconf } = require('../config/conf.js')
 const { EMAILconf } = require('../config/conf.js')
 const resetEmail = require('../email/resetPassword.js')
 
@@ -27,8 +27,8 @@ class AuthController {
     private createToken(body: any) {
         return jsonwebtoken.sign(
             body,
-            confJWT.jwt.secretOrKey,
-            { expiresIn: confJWT.expiresIn }
+            JWTconf.secretOrKey,
+            { expiresIn: JWTconf.expiresIn }
         )
     }
 

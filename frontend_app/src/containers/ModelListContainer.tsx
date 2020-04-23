@@ -6,19 +6,15 @@ import * as modelActions from '../redux/list/model/model.action'
 import * as filterActions from '../redux/list/filter/filter.action'
 
 import { search } from '../func/filter'
-import { SearchList } from '../components/List/SearchList'
+import { ModelList } from '../components/List/ModelList'
 
-import { SearchCard } from '../components/Card/SearchCard'
+import { ModelCard } from '../components/Card/ModelCard'
 
 import { itemsModelType } from '../type/model.type'
 import { setModelType } from '../redux/list/model/model.type'
 import { setSearchQueryType } from '../redux/list/filter/filter.type'
 
 import { rootReducerType } from '../redux/list'
-
-import { ILstContainer } from '../interfaces/ListContainer'
-
-
 
 type PropsType = {
   modifier: string
@@ -29,7 +25,7 @@ type PropsType = {
   setSearchQuery: (value: string) => setSearchQueryType,
 }
 
-class ModelListContainer extends React.Component<PropsType> implements ILstContainer {
+class ModelListContainer extends React.Component<PropsType> {
 
   setModel = async () => {
     try {
@@ -63,14 +59,14 @@ class ModelListContainer extends React.Component<PropsType> implements ILstConta
   }
 
   render() {
-    const { model, setSearchQuery, modifier } = this.props
+    const { model, setSearchQuery, modifier, tableName } = this.props
     return (
-      <SearchList
+      <ModelList
         items={model}
         setSearchQuery={setSearchQuery}
         modifier={modifier}
-        href={'model'}
-        Card={SearchCard}
+        href={tableName}
+        Card={ModelCard}
       />
     )
   }

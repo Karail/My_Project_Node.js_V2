@@ -8,7 +8,7 @@ import * as filterActions from '../../redux/list/filter/filter.action'
 import { search } from '../../func/filter'
 import { playVideo, stopVideo } from '../../func/actionVideo'
 
-import { SearchList } from '../../components/List/SearchList'
+import { ModelList } from '../../components/List/ModelList'
 import { ProfileMyVideoCard } from '../../components/Card/ProfileMyVideoCard'
 
 import { rootReducerType } from '../../redux/list'
@@ -18,9 +18,6 @@ import { setVideoType } from '../../redux/list/video/video.type'
 
 import { itemsVideoType } from '../../type/video.type'
 
-import { ILstContainer } from '../../interfaces/ListContainer'
-
-
 type PropsType = {
   video: itemsVideoType[],
   serverURL: string,
@@ -28,14 +25,7 @@ type PropsType = {
   setSearchQuery: (value: string) => setSearchQueryType,
 }
 
-type StateType = {
-}
-
-interface IProfileContainer extends ILstContainer {
-  removeMy: (id: number) => void
-}
-
-class ProfileMyVideoContainer extends React.Component<PropsType, StateType> implements IProfileContainer {
+class ProfileMyVideoContainer extends React.Component<PropsType> {
 
   async componentDidMount() {
     try {
@@ -66,13 +56,9 @@ class ProfileMyVideoContainer extends React.Component<PropsType, StateType> impl
   removeMy = async (id: number) => {
     try {
       const { setVideo, serverURL } = this.props
-      const response = await fetch(`${serverURL}/delMyVideo`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
+      const response = await fetch(`${serverURL}/removeMyVideo?video_id=${id}`, {
+        method: 'delete',
         credentials: 'include',
-        body: JSON.stringify(id)
       })
       const data = await response.json()
       setVideo(data)
@@ -84,7 +70,7 @@ class ProfileMyVideoContainer extends React.Component<PropsType, StateType> impl
   render() {
     const { setSearchQuery, video } = this.props
     return (
-      <SearchList
+      <ModelList
         items={video}
         removeMy={this.removeMy}
         setSearchQuery={setSearchQuery}

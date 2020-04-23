@@ -18,8 +18,6 @@ const { Video, Comment, Subscriber, LikeSubscriber, DislikeSubscriber } = requir
 
 class ActionUserController {
 
-    private url = MAINconf.url
-
     async addComment(req: IUserRequest, res: Response) {
         try {
 
@@ -46,8 +44,6 @@ class ActionUserController {
                     video_id,
                 }
             })
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
             res.json(items)
         } catch (err) {
             console.log(err)
@@ -55,10 +51,10 @@ class ActionUserController {
         }
     }
 
-    async delLike(req: IUserRequest, res: Response) {
+    async removeLikeVideo(req: IUserRequest, res: Response) {
         try {
             const subscriber_id = req.user.id
-            const video_id = JSON.parse(Object.keys(req.body)[0])
+            const video_id = req.query.video_id
 
             await LikeSubscriber.destroy({
                 where: {
@@ -83,8 +79,6 @@ class ActionUserController {
                 }],
             })
 
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
             res.json(items)
 
         } catch (err) {
@@ -104,10 +98,6 @@ class ActionUserController {
                 like,
                 dislike,
             }
-
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
-
 
             const itemDis = await DislikeSubscriber.findOne({
                 where: {
@@ -197,10 +187,6 @@ class ActionUserController {
                 like,
                 dislike,
             }
-
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
-
 
             const itemLike = await LikeSubscriber.findOne({
                 where: {
@@ -294,7 +280,7 @@ class ActionUserController {
             })
         })
     }
-   //!Перенести в другой класс
+    //!Перенести в другой класс
     deleteFile(filePath: string) {
         return new Promise((reslove, reject) => {
             fs.unlink(filePath, (err) => {
@@ -304,28 +290,36 @@ class ActionUserController {
         })
     }
 
+    awsDeleteFile(params: any) {
+        return new Promise((resolve, reject) => {
+            s3.deleteObject(params, function (err: Error, data: any) {
+                if (err)
+                    return reject(err)
+                resolve(data)
+            })
+        })
+    }
+
     async uploadVideo(req: IUserRequest, res: Response) {
+
+        const filePath = path.join(__dirname, '..', '..', req.file.path)
+        const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
+
         try {
-
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
-
-            const filePath = path.join(__dirname, '..', '..', req.file.path)
-
+            
             const { name } = req.body
 
-            const duration = await getVideoDurationInSeconds(filePath)
+            const duration: number = await getVideoDurationInSeconds(filePath)
 
-            const newDuration = (duration / 2) - 5
+            const newDuration = Math.round(duration / 2)
 
-            let video = await new ffmpeg(filePath);
+            let videoPreview = await new ffmpeg(filePath);
 
-            const filePathPreview: string = await new Promise((resolve, reject) => {
-                video
-                    .setVideoStartTime(newDuration)
-                    .setVideoDuration('00:00:05')
-
-                    .save(path.join(__dirname, '..', '..', '/uploads', '/preview/', req.file.filename), (error, file) => {
+            await new Promise((resolve, reject) => {
+                videoPreview
+                    .setVideoStartTime(String(newDuration))
+                    .setVideoDuration('3')
+                    .save(filePathPreview, (error, file) => {
                         if (error)
                             reject(error)
                         resolve(file)
@@ -352,28 +346,23 @@ class ActionUserController {
                 updatedAt: new Date(),
             })
 
-
-            await this.deleteFile(filePath)
-            await this.deleteFile(filePathPreview)
-
             res.json('file add')
 
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })
+        } finally {
+            await this.deleteFile(filePath)
+            await this.deleteFile(filePathPreview)
         }
 
     }
 
-    async delMyVideo(req: IUserRequest, res: Response) {
+    async removeMyVideo(req: IUserRequest, res: Response) {
         try {
             const user_id = req.user.id
 
-            const video_id = JSON.parse(Object.keys(req.body)[0])
-
-            res.set('Access-Control-Allow-Origin', this.url)
-            res.set('Access-Control-Allow-Credentials', 'true')
-
+            const video_id = req.query.video_id
 
             const videoItems = await Video.findOne({
                 where: {
@@ -408,21 +397,9 @@ class ActionUserController {
                 }
             })
 
-            await new Promise((resolve, reject) => {
-                s3.deleteObject(paramsVideo, function (err: any, data: any) {
-                    if (err)
-                        return reject(err)
-                    resolve(data)
-                })
-            })
+            await this.awsDeleteFile(paramsVideo)
 
-            await new Promise((resolve, reject) => {
-                s3.deleteObject(paramsPreview, function (err: any, data: any) {
-                    if (err)
-                        return reject(err)
-                    resolve(data)
-                })
-            })
+            await this.awsDeleteFile(paramsPreview)
 
             await Video.destroy({
                 where: {

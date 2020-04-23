@@ -13,7 +13,7 @@ export const CommentList = ({ comments }) => {
                     comments.map((elem, i) => {
 
                         const { createdAt, name, comment, answer, id, comment_id } = elem
-                        // console.log(comments.filter((item) => item.comment_id == id));
+                        console.log(comment_id);
                         return (
                             <div className="" key={i}>
                                 <div className="main-article-content-video-commented-list__item">
@@ -29,7 +29,7 @@ export const CommentList = ({ comments }) => {
                                     <div>
                                         <p >Ответить</p>
                                         {
-                                            answer == 1
+                                            answer === 1
                                                 ?
                                                 <p data-id={id}>Показать ответы</p>
                                                 :
@@ -39,7 +39,7 @@ export const CommentList = ({ comments }) => {
                                 </div>
                                 <div className="comment-answer" id={`answer-${id}`} style={{ marginLeft: '50px' }}>
                                     {
-                                        <CommentList comments={comments.filter((item) => item.comment_id == id)} />
+                                        <CommentList comments={comments.filter((item) => item.comment_id === id)} />
                                     }
                                 </div>
                             </div>

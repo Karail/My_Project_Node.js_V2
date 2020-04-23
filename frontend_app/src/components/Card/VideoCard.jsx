@@ -7,8 +7,10 @@ export const VideoCard = ({ id, name, preview, href = 'movie', modifier = '', pl
         <video
           src={preview}
           className={`main-content__item main-content__item__img ${modifier}`}
-          onMouseOver={e => playVideo(e)}
-          onMouseOut={e => stopVideo(e)}
+          onMouseOver={playVideo}
+          onMouseOut={stopVideo}
+          muted
+          loop
         />
         <div className="main-content__item__descr">
           <p>{name}</p>

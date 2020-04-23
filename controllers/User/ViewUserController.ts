@@ -12,14 +12,9 @@ interface IUserRequest extends Request {
 
 class ViewUserController {
 
-    private url = MAINconf.url
-
     async showLikeVideo(req: IUserRequest, res: Response) {
 
         const { id, name } = req.user
-
-        res.set('Access-Control-Allow-Origin', this.url)
-        res.set('Access-Control-Allow-Credentials', 'true')
 
         try {
             const items = await Video.findAll({
@@ -44,9 +39,6 @@ class ViewUserController {
 
     async showMyVideo(req: IUserRequest, res: Response) {
         const { id } = req.user
-
-        res.set('Access-Control-Allow-Origin', this.url)
-        res.set('Access-Control-Allow-Credentials', 'true')
 
         try {
             const items = await Video.findAll({

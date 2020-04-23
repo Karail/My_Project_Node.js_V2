@@ -3,9 +3,17 @@ import React from 'react'
 import { LoginModal } from '../../../components/Modal/Login/LoginModal'
 import { setCookie } from '../../../func/cookie'
 
-class LoginModalContainer extends React.Component {
-    
-    login = async (e) => {
+type PropsType = {
+    serverURL: string
+    closeModal: () => void
+    openPass: () => void
+    openLogin: () => void
+    openRegister: () => void
+}
+
+class LoginModalContainer extends React.Component<PropsType> {
+
+    login = async (e: any) => {
         try {
             e.preventDefault()
             const { serverURL } = this.props
@@ -13,7 +21,6 @@ class LoginModalContainer extends React.Component {
 
             const response = await fetch(`${serverURL}/login`, {
                 method: 'POST',
-                // credentials: 'same-origin',
                 body: formData,
             })
             const data = await response.json();

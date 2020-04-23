@@ -1,7 +1,10 @@
 import React from 'react'
 
 
-export const PasswordModal = ({ displayPass, closeModal, password, openLogin }) => {
+export const PasswordModal = (props) => {
+
+  const { displayPass, closeModal, password, openLogin } = props
+
   return (
     <div className="modal">
       <div className="modal-back" style={{ display: displayPass }} onClick={closeModal}></div>

@@ -9,9 +9,10 @@ export const ProfileMyVideoCard = ({ id, preview, name, href = 'movie', modifier
           <video
             src={preview}
             className={`main-content__item main-content__item__img ${modifier}`}
-            onMouseOver={e => playVideo(e)}
-            onMouseOut={e => stopVideo(e)}
+            onMouseOver={playVideo}
+            onMouseOut={stopVideo}
             muted
+            loop
           />
         </div>
       </a>

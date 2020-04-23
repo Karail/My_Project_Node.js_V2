@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { IBase } from '../../../interfaces/Base'
 import { MovieDescr } from '../../../components/Movie/MovieDescr/MovieDescr'
 import { getCookie } from '../../../func/cookie'
 
@@ -14,11 +13,6 @@ import { likeDislikeType } from '../../../type/movie.type';
 import { rootReducerType } from '../../../redux/list'
 import { itemsMovieType } from '../../../type/movie.type'
 
-interface IMovieDescrContainer extends IBase {
-    likeFunc: () => void
-    dislikeFunc: () => void
-}
-
 type PropsType = {
     serverURL: string,
     match: any,
@@ -26,7 +20,7 @@ type PropsType = {
     updateLikeDislike: (data: likeDislikeType) => updateLikeDislikeType
 }
 
-class MovieDescrContainer extends React.Component<PropsType> implements IMovieDescrContainer {
+class MovieDescrContainer extends React.Component<PropsType> {
 
     likeFunc = async () => {
         if (getCookie('token')) {

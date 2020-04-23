@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const SearchCard = ({ id, img, name, href = 'movie', modifier = '' }) => {
+export const ModelCard = ({ id, img, name, href = 'movie', modifier = '' }) => {
   return (
     <a href={`/${href}/${id}`}>
       <div className={`main-content__item main-content__item__img ${modifier}`} style={{ backgroundImage: `url(${img})` }}>

@@ -7,10 +7,9 @@ import { bindActionCreators } from 'redux'
 import * as videoActions from '../redux/list/video/video.action'
 import * as listUrlActions from '../redux/list/listUrl/listUrl.action'
 
-import { playVideo, stopVideo, TimeUpdateVideo } from '../func/actionVideo';
+import { playVideo, stopVideo } from '../func/actionVideo';
 
 import { rootReducerType } from '../redux/list'
-import { IVideoLstContainer } from '../interfaces/IVideoListContainer';
 import { setVideoType, setNextVideoType } from '../redux/list/video/video.type';
 import { itemsVideoType } from '../type/video.type';
 import { updateListUrlType } from '../redux/list/listUrl/listUrl.type';
@@ -36,7 +35,7 @@ type dataType = {
   nextOffset: string
 }
 
-class VideoListContainer extends React.Component<PropsType> implements IVideoLstContainer {
+class VideoListContainer extends React.Component<PropsType> {
 
   responseMiddleware = async (url = this.props.nextUrl) => {
     try {
@@ -78,7 +77,6 @@ class VideoListContainer extends React.Component<PropsType> implements IVideoLst
 
       const data = await this.responseMiddleware(actionData.payload)
       setVideo(data)
-      TimeUpdateVideo()
     } catch (err) {
       console.log(err)
     }
@@ -89,7 +87,6 @@ class VideoListContainer extends React.Component<PropsType> implements IVideoLst
       const { setNextVideo } = this.props;
       const data = await this.responseMiddleware()
       setNextVideo(data)
-      TimeUpdateVideo()
     } catch (err) {
       console.log(err)
     }

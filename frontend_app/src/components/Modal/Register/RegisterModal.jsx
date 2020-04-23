@@ -1,7 +1,10 @@
 import React from 'react'
 
 
-export const RegisterModal = ({ displayReg, closeModal, register, openLogin }) => {
+export const RegisterModal = (props) => {
+
+  const { displayReg, closeModal, register, openLogin } = props
+  console.log(openLogin);
   return (
     <div className="modal">
       <div className="modal-back" style={{ display: displayReg }} onClick={closeModal}></div>

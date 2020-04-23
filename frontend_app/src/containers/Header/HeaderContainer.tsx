@@ -23,26 +23,23 @@ class HeaderContainer extends React.Component<PropsType> {
     }
 
     openRegister = () => {
+        this.closeModal()
         this.setState({
             displayReg: 'block',
-            displayLog: 'none',
-            displayPass: 'none',
         })
     }
 
     openLogin = () => {
+        this.closeModal()
         this.setState({
             displayLog: 'block',
-            displayReg: 'none',
-            displayPass: 'none',
         })
     }
 
     openPass = () => {
+        this.closeModal()
         this.setState({
             displayPass: 'block',
-            displayReg: 'none',
-            displayLog: 'none',
         })
     }
 
@@ -88,6 +85,7 @@ class HeaderContainer extends React.Component<PropsType> {
                     {...this.props}
                     {...this.state}
                     closeModal={this.closeModal}
+                    openRegister={this.openRegister}
                     openLogin={this.openLogin}
                 />
 
@@ -96,6 +94,7 @@ class HeaderContainer extends React.Component<PropsType> {
                     {...this.state}
                     closeModal={this.closeModal}
                     openPass={this.openPass}
+                    openLogin={this.openLogin}
                     openRegister={this.openRegister}
                 />
                 <PasswordModalContainer

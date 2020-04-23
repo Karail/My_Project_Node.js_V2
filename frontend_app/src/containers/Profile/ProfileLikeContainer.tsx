@@ -8,7 +8,7 @@ import * as filterActions from '../../redux/list/filter/filter.action'
 import { search } from '../../func/filter'
 import { playVideo, stopVideo } from '../../func/actionVideo'
 
-import { SearchList } from '../../components/List/SearchList'
+import { ModelList } from '../../components/List/ModelList'
 import { ProfileLikeVideoCard } from '../../components/Card/ProfileLikeVideoCard'
 
 import { rootReducerType } from '../../redux/list'
@@ -17,9 +17,6 @@ import { setSearchQueryType } from '../../redux/list/filter/filter.type'
 import { setVideoType } from '../../redux/list/video/video.type'
 
 import { itemsVideoType } from '../../type/video.type'
-
-import { ILstContainer } from '../../interfaces/ListContainer'
-
 
 type PropsType = {
   video: itemsVideoType[],
@@ -44,11 +41,7 @@ class ProfileLikeContainer extends React.Component<PropsType, StateType> {
 
       setSearchQuery('')
 
-
       const response = await fetch(`${serverURL}/showLikeVideo`, {
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
         credentials: 'include',
       })
 
@@ -60,16 +53,12 @@ class ProfileLikeContainer extends React.Component<PropsType, StateType> {
     }
   }
 
-  removeLike = async (id: number) => {
+  removeLikeVideo = async (id: number) => {
     try {
       const { setVideo, serverURL } = this.props
-      const response = await fetch(`${serverURL}/delLike`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
+      const response = await fetch(`${serverURL}/removeLikeVideo?video_id=${id}`, {
+        method: 'delete',
         credentials: 'include',
-        body: JSON.stringify(id)
       })
       const data = await response.json()
       setVideo(data)
@@ -81,9 +70,9 @@ class ProfileLikeContainer extends React.Component<PropsType, StateType> {
   render() {
     const { setSearchQuery, video } = this.props
     return (
-      <SearchList
+      <ModelList
         items={video}
-        removeLike={this.removeLike}
+        removeLikeVideo={this.removeLikeVideo}
         setSearchQuery={setSearchQuery}
         Card={ProfileLikeVideoCard}
         playVideo={playVideo}

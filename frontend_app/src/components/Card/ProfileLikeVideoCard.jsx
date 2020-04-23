@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const ProfileLikeVideoCard = ({ id, preview, name, href = 'movie', modifier = '', removeLike, playVideo, stopVideo }) => {
+export const ProfileLikeVideoCard = ({ id, preview, name, href = 'movie', modifier = '', removeLikeVideo, playVideo, stopVideo }) => {
 
   return (
     <div className="main-content__item">
@@ -9,15 +9,16 @@ export const ProfileLikeVideoCard = ({ id, preview, name, href = 'movie', modifi
           <video
             src={preview}
             className={`main-content__item main-content__item__img ${modifier}`}
-            onMouseOver={e => playVideo(e)}
-            onMouseOut={e => stopVideo(e)}
+            onMouseOver={playVideo}
+            onMouseOut={stopVideo}
             muted
+            loop
           />
         </div>
       </a>
       <div className="main-content__item__descr profile-main-content__item__descr">
         <p>{name}</p>
-        <span onClick={(e) => { removeLike(e.target.id) }} id={id}>Удалить</span>
+        <span onClick={(e) => { removeLikeVideo(e.target.id) }} id={id}>Удалить</span>
       </div>
     </div>
   )
