@@ -30,7 +30,7 @@ app.use(viewMainRouter)
 app.use(authRouter)
 app.use(viewUserRouter)
 app.use(actionUserRouter)
-
+//
 app.listen(8080, () => console.log('start worker'))
 
 
