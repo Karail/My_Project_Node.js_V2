@@ -8,7 +8,7 @@ class ViewUserController {
 
     async showLikeVideo(req: IUserRequest, res: Response) {
 
-        const { id, name } = req.user
+        const { id } = req.user
 
         try {
             const items = await Video.findAll({

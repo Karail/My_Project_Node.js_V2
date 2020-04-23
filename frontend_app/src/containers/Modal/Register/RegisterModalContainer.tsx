@@ -15,7 +15,7 @@ class RegisterModalContainer extends React.Component<PropsType> {
     register = async (e: any) => {
         try {
             e.preventDefault()
-            const { serverURL } = this.props
+            const { serverURL, closeModal } = this.props
             const formData = new FormData(e.target)
 
             const response = await fetch(`${serverURL}/register`, {
@@ -24,9 +24,12 @@ class RegisterModalContainer extends React.Component<PropsType> {
             })
             const data = await response.json();
             console.log(data)
-            
-            if (data.token)
+
+            if (data.token) {
                 setCookie('token', data.token)
+                closeModal()
+            }
+
         } catch (err) {
             console.log(err)
         }

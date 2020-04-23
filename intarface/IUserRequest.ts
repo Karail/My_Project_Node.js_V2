@@ -7,6 +7,6 @@ export type TokenBodyType = {
 }
 
 export default interface IUserRequest extends Request {
-    user?: TokenBodyType
-    cookie?: CookieOptions
+    user?: any
+    cookie?: any
 }
