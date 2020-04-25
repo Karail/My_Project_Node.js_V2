@@ -1,14 +1,69 @@
 import React from 'react'
 import { ProfileUpload } from '../../components/Profile/ProfileUpload'
-import { EventType } from '@testing-library/react'
+import { itemsModelType } from '../../type/model.type';
+import e from 'express';
 
 
 type PropsType = {
   serverURL: string,
 }
 
+type optionsType = {
+  value: number,
+  label: string
+}[]
 
-class ProfileUploadContainer extends React.Component<PropsType> {
+type StateType = {
+  optionsCategory: optionsType
+  optionsModel: optionsType
+  optionsStudio: optionsType
+}
+
+class ProfileUploadContainer extends React.Component<PropsType, StateType> {
+
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      optionsCategory: [],
+      optionsStudio: [],
+      optionsModel: []
+    };
+  }
+
+  async updateState(name: string) {
+    try {
+      const { serverURL } = this.props
+      const response = await fetch(`${serverURL}/${name}`)
+      const data: itemsModelType[] = await response.json()
+      const newState: optionsType = []
+      data.forEach((el) => {
+        newState.push({
+          value: el.id,
+          label: el.name
+        })
+      });
+      return newState
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async componentDidMount() {
+    const category = await this.updateState('category')
+    const model = await this.updateState('model')
+    const studio = await this.updateState('studio')
+    if (category && model && studio) {
+      this.setState({
+        optionsCategory: category
+      })
+      this.setState({
+        optionsModel: model
+      })
+      this.setState({
+        optionsStudio: studio
+      })
+    }
+  }
 
   uploadVideo = async (e: any) => {
     try {
@@ -28,6 +83,10 @@ class ProfileUploadContainer extends React.Component<PropsType> {
 
       const data = await response.json()
 
+      if (response.status != 200) {
+        throw data
+      }
+
       alert(data)
 
     } catch (err) {
@@ -37,7 +96,12 @@ class ProfileUploadContainer extends React.Component<PropsType> {
 
   render() {
     return (
-      <ProfileUpload uploadVideo={this.uploadVideo} />
+      <ProfileUpload
+        uploadVideo={this.uploadVideo}
+        optionsCategory={this.state.optionsCategory}
+        optionsStudio={this.state.optionsStudio}
+        optionsModel={this.state.optionsModel}
+      />
     )
   }
 }

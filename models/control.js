@@ -86,4 +86,7 @@ module.exports = {
     Subscriber,
     LikeSubscriber,
     DislikeSubscriber,
+    VideoCategory,
+    VideoStudio,
+    VideoModel
 } 

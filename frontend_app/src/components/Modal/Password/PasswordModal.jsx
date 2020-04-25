@@ -3,7 +3,7 @@ import React from 'react'
 
 export const PasswordModal = (props) => {
 
-  const { displayPass, closeModal, password, openLogin } = props
+  const { displayPass, closeModal, password, openModal } = props
 
   return (
     <div className="modal">
@@ -15,7 +15,7 @@ export const PasswordModal = (props) => {
           </div>
           <button type="submit" className="btn-main">Отправить</button>
         </form>
-        <p onClick={openLogin}>Вход</p>
+        <p onClick={openModal} data-name="displayLog">Вход</p>
       </div>
     </div>
   )

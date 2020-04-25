@@ -2,7 +2,7 @@ import React from 'react'
 
 export const LoginModal = (props) => {
 
-  const { displayLog, closeModal, login, openPass, openRegister } = props
+  const { displayLog, closeModal, login, openModal } = props
   
   return (
     <div className="modal">
@@ -17,8 +17,8 @@ export const LoginModal = (props) => {
           </div>
           <button type="submit" className="btn-main">Вход</button>
         </form>
-        <p onClick={openPass}>Забыли пароль?</p>
-        <p onClick={openRegister}>Создать аккаунт</p>
+        <p onClick={openModal} data-name="displayPass">Забыли пароль?</p>
+        <p onClick={openModal} data-name="displayReg">Создать аккаунт</p>
       </div>
     </div>
   )

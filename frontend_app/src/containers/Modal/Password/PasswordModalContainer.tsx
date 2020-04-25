@@ -5,7 +5,7 @@ import { PasswordModal } from '../../../components/Modal/Password/PasswordModal'
 type PropsType = {
     serverURL: string
     closeModal: () => void
-    openLogin: () => void
+    openModal: any
 }
 
 class PasswordModalContainer extends React.Component<PropsType> {
@@ -20,9 +20,7 @@ class PasswordModalContainer extends React.Component<PropsType> {
                 method: 'POST',
                 body: formData,
             })
-            console.log(response)
             const data = await response.json();
-
 
             if (data.status === 1) {
                 alert(data.message)

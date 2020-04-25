@@ -1,7 +1,7 @@
 import React from 'react'
 import { getCookie } from '../../func/cookie';
 
-export const Header = ({ logout, openProfile, openLogin, openRegister, openSearch }) => {
+export const Header = ({ logout, openProfile, openModal, openSearch }) => {
 
     return (
         <div className="header-page">
@@ -25,8 +25,8 @@ export const Header = ({ logout, openProfile, openLogin, openRegister, openSearc
                                     </div>
                                     :
                                     <div className="header-main-login">
-                                        <p className="header-main-login__log" onClick={openLogin}>Войти</p>
-                                        <p className="header-main-login__log" onClick={openRegister}>Регистрация</p>
+                                        <p className="header-main-login__log" onClick={openModal} data-name="displayLog">Войти</p>
+                                        <p className="header-main-login__log" onClick={openModal} data-name="displayReg">Регистрация</p>
                                     </div>
                             }
                         </div>

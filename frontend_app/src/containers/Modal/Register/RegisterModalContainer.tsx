@@ -6,8 +6,7 @@ import { setCookie } from '../../../func/cookie'
 type PropsType = {
     serverURL: string
     closeModal: () => void
-    openRegister: () => void
-    openLogin: () => void
+    openModal: any
 }
 
 class RegisterModalContainer extends React.Component<PropsType> {

@@ -10,7 +10,7 @@ const sequelize = require('../../db/db.js')
 import IUserRequest from '../../intarface/IUserRequest';
 import AWS from '../abstract/AWS';
 
-const { Video, Comment, Subscriber, LikeSubscriber, DislikeSubscriber } = require('../../models/control.js')
+const { Video, Comment, Subscriber, LikeSubscriber, DislikeSubscriber, VideoCategory, VideoModel, VideoStudio } = require('../../models/control.js')
 
 class ActionUserController {
 
@@ -236,55 +236,96 @@ class ActionUserController {
     }
 
     async uploadVideo(req: IUserRequest, res: Response) {
-
-        const filePath = path.join(__dirname, '..', '..', req.file.path)
-        const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
-
         try {
+            console.log(req.body)
+            const { name, category, model, studio, privateType } = req.body
 
-            const { name } = req.body
+            let privat = 0;
 
-            const duration: number = await getVideoDurationInSeconds(filePath)
+            if (!name) {
+                throw new Error('Нет названия');
+            } else if (!req.file) {
+                throw new Error('Загрузите файл');
+            }
 
-            const newDuration = Math.round(duration / 2)
+            const filePath = path.join(__dirname, '..', '..', req.file.path)
+            const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
 
-            let videoPreview = await new ffmpeg(filePath);
+            try {
 
-            await new Promise((resolve, reject) => {
-                videoPreview
-                    .setVideoStartTime(String(newDuration))
-                    .setVideoDuration('3')
-                    .save(filePathPreview, (error, file) => {
-                        if (error)
-                            reject(error)
-                        resolve(file)
-                    });
-            })
+                if (privateType) {
+                    privat = 1
+                }
 
-            const videoAWS = await AWS.awsUploadFile(filePath, req.file.filename, req.file.mimetype, '/video')
+                const duration: number = await getVideoDurationInSeconds(filePath)
 
-            const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
+                const newDuration = Math.round(duration / 2)
 
-            await Video.create({
-                name,
-                url: videoAWS.Location,
-                fileName: req.file.filename,
-                user_id: req.user.id,
-                preview: previewAWS.Location,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            })
+                let videoPreview = await new ffmpeg(filePath);
 
-            res.json('file add')
+                await new Promise((resolve, reject) => {
+                    videoPreview
+                        .setVideoStartTime(String(newDuration))
+                        .setVideoDuration('3')
+                        .save(filePathPreview, (error, file) => {
+                            if (error)
+                                reject(error)
+                            resolve(file)
+                        });
+                })
 
+                const videoAWS = await AWS.awsUploadFile(filePath, req.file.filename, req.file.mimetype, '/video')
+
+                const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
+
+                const video = await Video.create({
+                    name,
+                    url: videoAWS.Location,
+                    fileName: req.file.filename,
+                    user_id: req.user.id,
+                    preview: previewAWS.Location,
+                    private: privat,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+
+                for (let id of category) {
+                    await VideoCategory.create({
+                        category_id: id,
+                        video_id: video.id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+                for (let id of model) {
+                    await VideoModel.create({
+                        model_id: id,
+                        video_id: video.id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+                for (let id of studio) {
+                    await VideoStudio.create({
+                        studio_id: id,
+                        video_id: video.id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+
+                res.json('file add')
+
+            } catch (err) {
+                console.log(err)
+                res.status(500).send({ message: 'Что то пошло не так' })
+            } finally {
+                await FileMethods.deleteFile(filePath)
+                await FileMethods.deleteFile(filePathPreview)
+            }
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
-        } finally {
-            await FileMethods.deleteFile(filePath)
-            await FileMethods.deleteFile(filePathPreview)
+            res.status(500).send({ message: err.message })
         }
-
     }
 
     async removeMyVideo(req: IUserRequest, res: Response) {
@@ -315,7 +356,21 @@ class ActionUserController {
                     video_id,
                 }
             })
-
+            await VideoCategory.destroy({
+                where: {
+                    video_id,
+                }
+            })
+            await VideoModel.destroy({
+                where: {
+                    video_id,
+                }
+            })
+            await VideoStudio.destroy({
+                where: {
+                    video_id,
+                }
+            })
             await Video.destroy({
                 where: {
                     id: video_id,

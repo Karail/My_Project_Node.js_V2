@@ -21,17 +21,22 @@ export default abstract class ViewBaseFunc {
                         through: {
                             where: {
                                 [tableId]: req.params.id,
-                                private: false,
                             }
                         },
                         required: true
                     }],
+                    where: {
+                        private: false,
+                    },
                 })
             } else {
                 items = await Video.findAll({
                     offset: +req.query.offset,
                     limit: +req.query.limit,
                     order: [[req.query.sort, 'DESC']],
+                    where: {
+                        private: false,
+                    }
                 })
             }
             const nextOffset = +req.query.offset + +req.query.limit

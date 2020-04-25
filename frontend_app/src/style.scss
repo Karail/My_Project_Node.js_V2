@@ -24,6 +24,12 @@ $col-row: rgb(216, 133, 77);
 a {
   text-decoration: none;
 }
+
+.text {
+  &-def {
+    color: $col-text;
+  }
+}
 .fa-search {
   color: $col-text;
   background: $back;

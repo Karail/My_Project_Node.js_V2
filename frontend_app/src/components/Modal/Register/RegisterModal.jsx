@@ -3,8 +3,7 @@ import React from 'react'
 
 export const RegisterModal = (props) => {
 
-  const { displayReg, closeModal, register, openLogin } = props
-  console.log(openLogin);
+  const { displayReg, closeModal, register, openModal } = props
   return (
     <div className="modal">
       <div className="modal-back" style={{ display: displayReg }} onClick={closeModal}></div>
@@ -21,7 +20,7 @@ export const RegisterModal = (props) => {
           </div>
           <button type="submit" className="btn-main" id="reg-btn">Зарегистрироваться</button>
         </form>
-        <p onClick={openLogin}>Войти</p>
+        <p onClick={openModal} data-name="displayLog">Войти</p>
       </div>
     </div>
   )

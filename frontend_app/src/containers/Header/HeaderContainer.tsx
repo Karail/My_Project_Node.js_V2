@@ -22,24 +22,10 @@ class HeaderContainer extends React.Component<PropsType> {
         }
     }
 
-    openRegister = () => {
+    openModal = (e: any) => {
         this.closeModal()
         this.setState({
-            displayReg: 'block',
-        })
-    }
-
-    openLogin = () => {
-        this.closeModal()
-        this.setState({
-            displayLog: 'block',
-        })
-    }
-
-    openPass = () => {
-        this.closeModal()
-        this.setState({
-            displayPass: 'block',
+            [e.target.dataset.name]: 'block',
         })
     }
 
@@ -76,8 +62,7 @@ class HeaderContainer extends React.Component<PropsType> {
                     {...this.props}
                     logout={this.logout}
                     openProfile={this.openProfile}
-                    openRegister={this.openRegister}
-                    openLogin={this.openLogin}
+                    openModal={this.openModal}
                     openSearch={this.openSearch}
                 />
 
@@ -85,23 +70,20 @@ class HeaderContainer extends React.Component<PropsType> {
                     {...this.props}
                     {...this.state}
                     closeModal={this.closeModal}
-                    openRegister={this.openRegister}
-                    openLogin={this.openLogin}
+                    openModal={this.openModal}
                 />
 
                 <LoginModalContainer
                     {...this.props}
                     {...this.state}
                     closeModal={this.closeModal}
-                    openPass={this.openPass}
-                    openLogin={this.openLogin}
-                    openRegister={this.openRegister}
+                    openModal={this.openModal}
                 />
                 <PasswordModalContainer
                     {...this.props}
                     {...this.state}
                     closeModal={this.closeModal}
-                    openLogin={this.openLogin}
+                    openModal={this.openModal}
                 />
             </div>
         )
