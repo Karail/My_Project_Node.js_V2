@@ -4,7 +4,6 @@ import moment from 'moment'
 
 
 export const CommentList = ({ comments }) => {
-    console.log(comments);
     return (
         <div>
             {
@@ -13,7 +12,6 @@ export const CommentList = ({ comments }) => {
                     comments.map((elem, i) => {
 
                         const { createdAt, name, comment, answer, id, comment_id } = elem
-                        console.log(comment_id);
                         return (
                             <div className="" key={i}>
                                 <div className="main-article-content-video-commented-list__item">

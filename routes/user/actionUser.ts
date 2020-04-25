@@ -20,4 +20,6 @@ router.post('/uploadVideo', fileMiddleware.single('file'), checkAuth, ActionUser
 
 router.delete('/removeMyVideo', checkAuth, ActionUser.removeMyVideo.bind(ActionUser))
 
+router.get('/updateViews', ActionUser.updateViews.bind(ActionUser))
+
 export default router

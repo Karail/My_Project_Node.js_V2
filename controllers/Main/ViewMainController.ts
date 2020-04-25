@@ -16,7 +16,7 @@ class ViewMainController extends ViewBaseFunc {
     }
 
     showCategory(req: Request, res: Response) {
-        this.resModel(req, res, Category)
+        this.resModel(res, Category)
     }
 
     showVideoCategory(req: Request, res: Response) {
@@ -24,7 +24,7 @@ class ViewMainController extends ViewBaseFunc {
     }
 
     showModel(req: Request, res: Response) {
-        this.resModel(req, res, Model)
+        this.resModel(res, Model)
     }
 
     showVideoModel(req: Request, res: Response) {
@@ -32,7 +32,7 @@ class ViewMainController extends ViewBaseFunc {
     }
 
     showStudio(req: Request, res: Response) {
-        this.resModel(req, res, Studio)
+        this.resModel(res, Studio)
     }
 
     showVideoStudio(req: Request, res: Response) {
@@ -48,18 +48,32 @@ class ViewMainController extends ViewBaseFunc {
                 where: { id: req.params.id },
             })
 
-            const category = await this.resVideoIdModel(req, res, Category)
+            const category = await this.resVideoIdModel(req, Category)
 
-            const model = await this.resVideoIdModel(req, res, Model)
+            const model = await this.resVideoIdModel(req, Model)
 
-            const studio = await this.resVideoIdModel(req, res, Studio)
+            const studio = await this.resVideoIdModel(req, Studio)
 
-            const tag = await this.resVideoIdModel(req, res, Tag)
+            const tag = await this.resVideoIdModel(req, Tag)
 
             const comment = await Comment.findAll({
                 order: [['id', 'DESC']],
                 where: {
                     video_id: req.params.id
+                }
+            })
+
+            const recommended = await Video.findAll({
+                where: [
+                    {
+                        id: {
+                            [Op.ne]: video.id
+                        }
+                    },
+                    Sequelize.literal('MATCH (name) AGAINST (:name)')
+                ],
+                replacements: {
+                    name: video.name
                 }
             })
 
@@ -70,6 +84,7 @@ class ViewMainController extends ViewBaseFunc {
                 studio,
                 tag,
                 comment,
+                recommended
             })
 
         } catch (err) {

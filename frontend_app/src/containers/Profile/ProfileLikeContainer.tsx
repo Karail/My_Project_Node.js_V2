@@ -25,11 +25,8 @@ type PropsType = {
   setSearchQuery: (value: string) => setSearchQueryType,
 }
 
-type StateType = {
-}
 
-
-class ProfileLikeContainer extends React.Component<PropsType, StateType> {
+class ProfileLikeContainer extends React.Component<PropsType> {
 
   async componentDidMount() {
     try {

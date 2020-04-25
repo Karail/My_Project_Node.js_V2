@@ -49,11 +49,7 @@ class CommentContainer extends React.Component<PropsType> {
   }
 
   addAnswer = async () => {
-    try {
 
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   showAnswer = (e: any) => {

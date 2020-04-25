@@ -1,5 +1,5 @@
-
-
+import Sequelize from 'sequelize'
+const Op = Sequelize.Op;
 import { Request, Response } from 'express'
 
 const { Video } = require('../../models/control.js')
@@ -45,7 +45,7 @@ export default abstract class ViewBaseFunc {
         }
     }
 
-    protected async resModel(req: Request, res: Response, model: any) {
+    protected async resModel(res: Response, model: any) {
         try {
             const items = await model.findAll({ order: [['id', 'DESC']] })
             res.json(items)
@@ -55,7 +55,7 @@ export default abstract class ViewBaseFunc {
         }
     }
 
-    protected resVideoIdModel(req: Request, res: Response, model: any) {
+    protected resVideoIdModel(req: Request, model: any) {
         return model.findAll({
             include: [{
                 model: Video,

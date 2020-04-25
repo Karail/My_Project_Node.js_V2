@@ -18,7 +18,7 @@ import ResetPasswordContainer from '../../containers/ResetPasswordContainer'
 class App extends React.Component {
    render() {
       const limit = 12
-      const serverURL = 'http://localhost:8080'
+      const serverURL = 'http://localhost:8082'
       return (
          <div>
             <Router>

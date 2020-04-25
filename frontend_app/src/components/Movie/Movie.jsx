@@ -5,7 +5,9 @@ import CommentContainer from '../../containers/Movie/Comment/CommentContainer'
 
 import "../../../node_modules/video-react/dist/video-react.css"
 import { Player, BigPlayButton } from 'video-react';
+import { VideoCard } from '../Card/VideoCard';
 // import HLSSource from '../../Hls/HLSSource';
+import { playVideo, stopVideo } from '../../func/actionVideo';
 
 export const Movie = (props) => {
   return (
@@ -13,7 +15,10 @@ export const Movie = (props) => {
       <div className="main-article">
         <div className="main-article-content">
           <div className="main-article-content-video">
-            <div className="main-article-content-video-item" >
+            <div
+              className="main-article-content-video-item"
+              onClick={props.updateViews}
+            >
 
               <Player
                 playsInline
@@ -34,15 +39,16 @@ export const Movie = (props) => {
             <CommentContainer {...props} />
           </div>
           <div className="main-article-content-recomented">
-            {/* {{#each recommended}}
-                        <a href="/article?id={{this.id}}">
-                            <div className="main-content__item" style="background-image: url({{this.img}});background-size: cover;">
-                                <div className="main-content__item__descr">
-                                    <p>{{this.name}}</p>
-                                </div>
-                            </div>
-                        </a>
-                    {{/each}} */}
+            {
+              props.movie.recommended.map((elem, i) => (
+                <VideoCard
+                  {...elem}
+                  key={i}
+                  playVideo={playVideo}
+                  stopVideo={stopVideo}
+                />
+              ))
+            }
           </div>
         </div>
       </div>

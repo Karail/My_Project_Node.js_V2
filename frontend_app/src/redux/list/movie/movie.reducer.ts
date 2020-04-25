@@ -5,12 +5,13 @@ import { itemsVideoType } from '../../../type/video.type'
 const initialState: initialStateType = {
     isReady: false,
     items: {
-        video: {} as itemsVideoType,
+        video: <itemsVideoType>{},
         category: [],
         model: [],
         studio: [],
         tag: [],
         comment: [],
+        recommended: []
     },
 }
 
@@ -31,7 +32,7 @@ export default (state: initialStateType = initialState, action: actionReturnType
                         ...state.items.video,
                         dislike: action.payload.dislike,
                         like: action.payload.like,
-                        
+
                     }
                 },
                 isReady: true,
@@ -42,6 +43,18 @@ export default (state: initialStateType = initialState, action: actionReturnType
                 items: {
                     ...state.items,
                     comment: action.payload
+                },
+                isReady: true,
+            }
+        case 'UPDATE_VIEWS':
+            return {
+                ...state,
+                items: {
+                    ...state.items,
+                    video: {
+                        ...state.items.video,
+                        views: action.payload,
+                    }
                 },
                 isReady: true,
             }

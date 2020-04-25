@@ -1,7 +1,7 @@
 
 import { itemsMovieType, likeDislikeType } from '../../../type/movie.type'
 
-import { setMovieType, updateLikeDislikeType, addCommentType } from './movie.type'
+import { setMovieType, updateLikeDislikeType, addCommentType, updateViewsType } from './movie.type'
 import { itemsCommentType } from '../../../type/comment.type'
 
 export const setMovie = (movie: itemsMovieType): setMovieType => ({
@@ -16,5 +16,10 @@ export const updateLikeDislike = (data: likeDislikeType): updateLikeDislikeType 
 
 export const addComment = (data: itemsCommentType[]): addCommentType => ({
     type: 'ADD_COMMENT',
+    payload: data
+});
+
+export const updateViews = (data: number): updateViewsType => ({
+    type: 'UPDATE_VIEWS',
     payload: data
 });

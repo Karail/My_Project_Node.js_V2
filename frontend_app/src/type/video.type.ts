@@ -5,7 +5,7 @@ export type itemsVideoType = {
     url: string,
     fileName: string,
     user_id: number | null,
-    views: number | null,
+    views: number,
     like: number | null,
     dislike: number | null,
     preview: string,

@@ -7,22 +7,31 @@ import * as movieActions from '../../redux/list/movie/movie.action'
 import { Movie } from '../../components/Movie/Movie'
 
 import { itemsMovieType } from '../../type/movie.type'
-import { setMovieType } from '../../redux/list/movie/movie.type'
+import { setMovieType, updateViewsType } from '../../redux/list/movie/movie.type'
 import { setSearchQueryType } from '../../redux/list/filter/filter.type'
 
 import { rootReducerType } from '../../redux/list'
 import { match } from "react-router";
 
 type PropsType = {
-  setMovie: (data: itemsMovieType) => setMovieType,
-  serverURL: string,
-  movie: itemsMovieType,
-  setSearchQuery: (value: string) => setSearchQueryType,
-  match: match<{ id: string }>,
+  setMovie: (data: itemsMovieType) => setMovieType
+  serverURL: string
+  movie: itemsMovieType
+  setSearchQuery: (value: string) => setSearchQueryType
+  match: match<{ id: string }>
+  updateViews: (data: number) => updateViewsType
+}
+type StateType = {
+  actionViewsLimit: boolean
 }
 
-
-class MovieContainer extends React.Component<PropsType> {
+class MovieContainer extends React.Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props)
+    this.state = {
+      actionViewsLimit: true
+    }
+  }
 
   componentDidMount = async () => {
     try {
@@ -37,10 +46,28 @@ class MovieContainer extends React.Component<PropsType> {
     }
   }
 
+  updateViews = async () => {
+
+    const { updateViews, serverURL, match } = this.props
+
+    this.setState({
+      actionViewsLimit: false
+    })
+
+    if (this.state.actionViewsLimit) {
+
+      const video_id = match.params.id
+
+      const response = await fetch(`${serverURL}/updateViews?video_id=${video_id}`);
+      const data = await response.json();
+      updateViews(data.views)
+    }
+  }
+
   render() {
     return (
       <div>
-        <Movie {...this.props} />
+        <Movie {...this.props} updateViews={this.updateViews} />
       </div>
     )
   }

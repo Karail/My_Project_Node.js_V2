@@ -110,11 +110,7 @@ class ActionUserController {
 
                     }
                 })
-                await Video.update({ dislike: +dislike - 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `dislike` = `dislike` - 1 WHERE id = " + video_id);
 
                 data.dislike = +dislike - 1
             }
@@ -129,11 +125,7 @@ class ActionUserController {
 
             if (!itemLike) {
 
-                await Video.update({ like: +like + 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `like` = `like` + 1 WHERE id = " + video_id);
 
                 await LikeSubscriber.create({
                     video_id,
@@ -146,11 +138,7 @@ class ActionUserController {
 
             } else {
 
-                await Video.update({ like: +like - 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `like` = `like` - 1 WHERE id = " + video_id);
 
                 await LikeSubscriber.destroy({
                     where: {
@@ -199,11 +187,7 @@ class ActionUserController {
 
                     }
                 })
-                await Video.update({ like: +like - 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `like` = `like` - 1 WHERE id = " + video_id);
 
                 data.like = +like - 1
             }
@@ -218,11 +202,7 @@ class ActionUserController {
 
             if (!itemDis) {
 
-                await Video.update({ dislike: +dislike + 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `dislike` = `dislike` + 1 WHERE id = " + video_id);
 
                 await DislikeSubscriber.create({
                     video_id,
@@ -235,11 +215,7 @@ class ActionUserController {
 
             } else {
 
-                await Video.update({ dislike: +dislike - 1 }, {
-                    where: {
-                        id: video_id,
-                    }
-                })
+                await sequelize.query("UPDATE videos SET `dislike` = `dislike` - 1 WHERE id = " + video_id);
 
                 await DislikeSubscriber.destroy({
                     where: {
@@ -265,7 +241,7 @@ class ActionUserController {
         const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
 
         try {
-            
+
             const { name } = req.body
 
             const duration: number = await getVideoDurationInSeconds(filePath)
@@ -359,6 +335,23 @@ class ActionUserController {
             })
 
             res.json(items)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: 'Что то пошло не так' })
+        }
+    }
+
+    async updateViews(req: Request, res: Response) {
+        try {
+            const video_id = req.query.video_id;
+            await sequelize.query("UPDATE videos SET `views` = `views` + 1 WHERE id = " + video_id);
+            const data = await Video.findOne({
+                where: {
+                    id: video_id
+                },
+                attributes: ['views']
+            })
+            res.json(data)
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })

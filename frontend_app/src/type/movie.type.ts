@@ -10,6 +10,7 @@ export type itemsMovieType = {
     studio: itemsModelType[],
     tag: [],
     comment: itemsCommentType[],
+    recommended: itemsVideoType[]
 }
 
 export type likeDislikeType = {

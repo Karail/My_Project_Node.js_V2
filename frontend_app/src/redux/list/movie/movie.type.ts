@@ -22,4 +22,9 @@ export type addCommentType = {
     payload: itemsCommentType[],
 }
 
-export type actionReturnType = setMovieType | updateLikeDislikeType | addCommentType
+export type updateViewsType = {
+    type: 'UPDATE_VIEWS',
+    payload: number,
+}
+
+export type actionReturnType = setMovieType | updateLikeDislikeType | addCommentType | updateViewsType

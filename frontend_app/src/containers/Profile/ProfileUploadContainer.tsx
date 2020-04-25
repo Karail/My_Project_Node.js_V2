@@ -28,7 +28,7 @@ class ProfileUploadContainer extends React.Component<PropsType> {
 
       const data = await response.json()
 
-      console.log(data)
+      alert(data)
 
     } catch (err) {
       console.log(err)
