@@ -1,7 +1,7 @@
 
 const { EMAILconf, MAINconf } = require('../config/conf')
 
-module.exports = function(email, token) {
+export default (email: string, token: string) => {
   return {
     to: email,
     from: EMAILconf.email,

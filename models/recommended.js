@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'video_id'
       }
     },
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Recommended.associate = function(models) {
+  Recommended.associate = function (models) {
     // associations can be defined here
   };
   return Recommended;

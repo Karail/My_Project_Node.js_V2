@@ -48,13 +48,13 @@ class ViewMainController extends ViewBaseFunc {
                 where: { id: req.params.id },
             })
 
-            const category = await this.resVideoIdModel(req, Category)
+            const category = await this.resModelVideoId(req, Category)
 
-            const model = await this.resVideoIdModel(req, Model)
+            const model = await this.resModelVideoId(req, Model)
 
-            const studio = await this.resVideoIdModel(req, Studio)
+            const studio = await this.resModelVideoId(req, Studio)
 
-            const tag = await this.resVideoIdModel(req, Tag)
+            const tag = await this.resModelVideoId(req, Tag)
 
             const comment = await Comment.findAll({
                 order: [['id', 'DESC']],

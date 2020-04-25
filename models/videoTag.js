@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'tag_id'
       }
     },
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  VideoTag.associate = function(models) {
+  VideoTag.associate = function (models) {
     // associations can be defined here
   };
   return VideoTag;

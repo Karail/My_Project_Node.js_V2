@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Studio = sequelize.define('Studio', {
     name: DataTypes.STRING,
     img: DataTypes.TEXT,
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Studio.associate = function(models) {
+  Studio.associate = function (models) {
     // associations can be defined here
   };
   return Studio;

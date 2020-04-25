@@ -18,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
     },
     preview: DataTypes.TEXT,
-    createdAt:{
+    private: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -27,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Video.associate = function(models) {
+  Video.associate = function (models) {
     // associations can be defined here
   };
   return Video;

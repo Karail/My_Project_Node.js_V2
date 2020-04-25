@@ -1,5 +1,4 @@
-import Sequelize from 'sequelize'
-const Op = Sequelize.Op;
+
 import { Request, Response } from 'express'
 
 const { Video } = require('../../models/control.js')
@@ -16,12 +15,13 @@ export default abstract class ViewBaseFunc {
                 items = await Video.findAll({
                     offset: +req.query.offset,
                     limit: +req.query.limit,
-                    order: [['id', 'DESC']],
+                    order: [[req.query.sort, 'DESC']],
                     include: [{
                         model: thwoModel,
                         through: {
                             where: {
-                                [tableId]: req.params.id
+                                [tableId]: req.params.id,
+                                private: false,
                             }
                         },
                         required: true
@@ -31,7 +31,7 @@ export default abstract class ViewBaseFunc {
                 items = await Video.findAll({
                     offset: +req.query.offset,
                     limit: +req.query.limit,
-                    order: [['id', 'DESC']],
+                    order: [[req.query.sort, 'DESC']],
                 })
             }
             const nextOffset = +req.query.offset + +req.query.limit
@@ -55,7 +55,7 @@ export default abstract class ViewBaseFunc {
         }
     }
 
-    protected resVideoIdModel(req: Request, model: any) {
+    protected resModelVideoId(req: Request, model: any) {
         return model.findAll({
             include: [{
                 model: Video,

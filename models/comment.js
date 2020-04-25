@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.INTEGER
     },
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Comment.associate = function(models) {
+  Comment.associate = function (models) {
     // associations can be defined here
   };
   return Comment;

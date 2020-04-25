@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     resetToken: DataTypes.TEXT,
     resetTokenExp: DataTypes.DATE,
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Subscriber.associate = function(models) {
+  Subscriber.associate = function (models) {
     // associations can be defined here
   };
   return Subscriber;

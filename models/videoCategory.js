@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'category_id'
       }
     },
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  VideoCategory.associate = function(models) {
+  VideoCategory.associate = function (models) {
     // associations can be defined here
   };
   return VideoCategory;

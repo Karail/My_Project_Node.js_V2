@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Tag = sequelize.define('tags', {
     name: DataTypes.STRING,
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Tag.associate = function(models) {
+  Tag.associate = function (models) {
     // associations can be defined here
   };
   return Tag;

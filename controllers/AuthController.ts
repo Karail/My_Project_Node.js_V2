@@ -3,8 +3,6 @@ import { Request, Response } from 'express'
 import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
-const nodemailer = require('nodemailer')
-const sendgrid = require('nodemailer-sendgrid-transport')
 
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op;
@@ -12,14 +10,9 @@ const Op = Sequelize.Op;
 const { Subscriber } = require('../models/control.js')
 
 const { JWTconf } = require('../config/conf.js')
-const { EMAILconf } = require('../config/conf.js')
-const resetEmail = require('../email/resetPassword.js')
 
-const transporter = nodemailer.createTransport(sendgrid({
-    auth: {
-        api_key: EMAILconf.sendgrid_api_key,
-    },
-}))
+import resetEmail from '../email/resetPassword'
+import transporter from '../email/';
 
 import { TokenBodyType } from '../intarface/IUserRequest';
 

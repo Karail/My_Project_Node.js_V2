@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Model', {
     name: DataTypes.STRING,
     img: DataTypes.TEXT,
-    createdAt:{
+    createdAt: {
       allowNull: false,
       type: DataTypes.DATE
     },
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  Model.associate = function(models) {
+  Model.associate = function (models) {
     // associations can be defined here
   };
   return Model;
