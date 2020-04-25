@@ -2,6 +2,7 @@
 
 export type initialStateType = {
     searchQuery: string,
+    filterBy: string,
 } 
 
 export type setSearchQueryType = {

@@ -35,10 +35,20 @@ type dataType = {
   data: itemsVideoType[],
   nextOffset: string
 }
+type StateType = {
+  sort: string
+}
+class VideoListContainer extends React.Component<PropsType, StateType> {
 
-class VideoListContainer extends React.Component<PropsType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      sort: 'id'
+    }
+  }
 
-  responseMiddleware = async (url = this.props.nextUrl) => {
+
+  responseMiddleware = async (url = this.props.nextUrl, sort: string) => {
     try {
       const { serverURL, match, limit, tableName, updateVideoListUrl } = this.props
 
@@ -48,11 +58,10 @@ class VideoListContainer extends React.Component<PropsType> {
 
       const response = await fetch(url)
       const data: dataType = await response.json()
-      console.log(data);
 
-      updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=${data.nextOffset}`)
+      updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=${data.nextOffset}&sort=${sort}`)
 
-      const btn = document.querySelector('.main__next-btn') as HTMLElement
+      const btn = document.querySelector('.main__next-btn') as HTMLButtonElement
 
       if (data.data.length < limit) {
         btn.style.display = 'none'
@@ -61,46 +70,63 @@ class VideoListContainer extends React.Component<PropsType> {
       }
       return data.data
     } catch (err) {
-        throw err
+      throw err
     }
   }
 
-  componentDidMount = async () => {
+  showVideo = async (sort: string) => {
     try {
-      const { serverURL, match, limit, tableName, updateVideoListUrl } = this.props
-      const { setVideo } = this.props;
+      const { serverURL, match, limit, tableName, updateVideoListUrl, setVideo } = this.props
 
       if (!match.params.id) {
         match.params.id = ''
       }
 
-      const actionData = updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=0`)
+      const actionData = updateVideoListUrl(`${serverURL}/${tableName}${match.params.id}?limit=${limit}&offset=0&sort=${sort}`)
 
-      const data = await this.responseMiddleware(actionData.payload)
+      const data = await this.responseMiddleware(actionData.payload, sort)
       setVideo(data)
     } catch (err) {
       console.log(err)
     }
   }
 
-  showVideo = async () => {
+  showNextVideo = async () => {
     try {
       const { setNextVideo } = this.props;
-      const data = await this.responseMiddleware()
+
+      const { sort } = this.state
+
+      const data = await this.responseMiddleware(undefined, sort)
       setNextVideo(data)
     } catch (err) {
       console.log(err)
     }
   }
 
+  updateSort = async (e: any) => {
+    await this.setState({
+      sort: e.target.dataset.sort
+    })
+    const { sort } = this.state
+
+    this.showVideo(sort)
+  }
+
+  componentDidMount = () => {
+    const { sort } = this.state
+    this.showVideo(sort)
+  }
+
   render() {
     return (
       <VideoList
         {...this.props}
-        showVideo={this.showVideo}
+        showNextVideo={this.showNextVideo}
         Card={VideoCard}
         playVideo={playVideo}
         stopVideo={stopVideo}
+        updateSort={this.updateSort}
       />
     )
   }

@@ -3,6 +3,7 @@ import { initialStateType, actionReturnType } from './filter.type'
 
 const initialState: initialStateType = {
     searchQuery: '',
+    filterBy: 'all',
 }
 
 export default (state: initialStateType = initialState, action: actionReturnType): initialStateType => {
