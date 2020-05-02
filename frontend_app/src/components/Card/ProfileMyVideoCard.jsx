@@ -18,7 +18,7 @@ export const ProfileMyVideoCard = ({ id, preview, name, href = 'movie', modifier
       </a>
       <div className="main-content__item__descr profile-main-content__item__descr">
         <p>{name}</p>
-        <span onClick={(e) => { removeMy(e.target.id) }} id={id}>Редактировать</span>
+        <a href={`/profile/edit/${id}`}>Редактировать</a>
         <span onClick={(e) => { removeMy(e.target.id) }} id={id}>Удалить</span>
       </div>
     </div>

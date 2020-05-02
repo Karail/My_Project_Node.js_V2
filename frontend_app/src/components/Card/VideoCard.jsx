@@ -18,4 +18,4 @@ export const VideoCard = ({ id, name, preview, href = 'movie', modifier = '', pl
       </div>
     </a>
   )
-}
+}    

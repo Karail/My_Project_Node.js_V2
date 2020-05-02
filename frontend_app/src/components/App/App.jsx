@@ -139,6 +139,10 @@ class App extends React.Component {
                            props => <ResetPasswordContainer serverURL={serverURL} {...props} />
                         } />
 
+                        <Route exact path="/profile/edit/:id" render={
+                              props => <ProfileContainer serverURL={serverURL} limit={limit} {...props} />
+                        } />
+
                      </Switch>
                   </div>
                </div>

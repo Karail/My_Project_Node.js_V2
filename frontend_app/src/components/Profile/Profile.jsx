@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import ProfileLikeContainer from '../../containers/Profile/ProfileLikeContainer'
 import ProfileUploadContainer from '../../containers/Profile/ProfileUploadContainer'
 import ProfileMyVideoContainer from '../../containers/Profile/ProfileMyVideoContainer'
+import ProfileEditContainer from '../../containers/Profile/ProfileEditContainer'
 
 export const Profile = ({ serverURL }) => {
     return (
@@ -30,6 +31,10 @@ export const Profile = ({ serverURL }) => {
 
                     <Route exact path="/profile/myVideo" render={
                         props => <ProfileMyVideoContainer  {...props} serverURL={serverURL} />
+                    } />
+
+                    <Route exact path="/profile/edit/:id" render={
+                        props => <ProfileEditContainer {...props} serverURL={serverURL} />
                     } />
 
                 </Switch>

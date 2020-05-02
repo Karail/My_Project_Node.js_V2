@@ -9,6 +9,7 @@ export type itemsVideoType = {
     like: number | null,
     dislike: number | null,
     preview: string,
+    private: boolean,
     createdAt: string,
     updatedAt: string,
 }

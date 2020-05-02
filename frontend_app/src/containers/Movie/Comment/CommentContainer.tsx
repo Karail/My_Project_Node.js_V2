@@ -48,26 +48,13 @@ class CommentContainer extends React.Component<PropsType> {
     }
   }
 
-  addAnswer = async () => {
-
-  }
-
-  showAnswer = (e: any) => {
-
-    const { comment } = this.props.movie
-
-    comment.forEach((el) => {
-      if (el.comment_id == e.target.dataset.id) {
-
-      }
-    })
-
-  }
-
   render() {
     return (
       <div>
-        <Comment addCommentForm={this.addCommentForm} {...this.props} showAnswer={this.showAnswer} addAnswer={this.addAnswer} />
+        <Comment
+          addCommentForm={this.addCommentForm}
+          {...this.props}
+        />
       </div>
     )
   }

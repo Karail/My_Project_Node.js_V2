@@ -23,6 +23,7 @@ $col-row: rgb(216, 133, 77);
 
 a {
   text-decoration: none;
+  color: $col-text;
 }
 
 .text {
@@ -56,14 +57,27 @@ button:focus {
     padding-top: 5px;
     padding-bottom: 5px;
     transition: 0.3s;
-    margin-top: 25px;
   }
 }
-.inp-def {
-  background: none;
-  border: none;
-  border-bottom: 1px solid $col-row;
-  color: $col-text;
+.inp {
+  &-def {
+    background: none;
+    border: none;
+    border-bottom: 1px solid $col-row;
+    color: $col-text;
+  }
+  &-answer {
+    outline: none;
+    width: 600px;
+    height: 22px;
+    font-size: 17px;
+    padding-left: 10px;
+    padding-top: 10px;
+    max-width: 98%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
 }
 .hr {
   background: $col-row;
@@ -296,21 +310,6 @@ button:focus {
               outline: none;
               padding: 20px 20px 5px 20px;
               font-size: 17px;
-            }
-            &__text {
-              background: none;
-              border: 2px solid $col-row;
-              color: $col-text;
-              outline: none;
-              width: 600px;
-              height: 35px;
-              font-size: 17px;
-              padding-left: 10px;
-              padding-top: 10px;
-              max-width: 98%;
-              border-top: none;
-              border-left: none;
-              border-right: none;
             }
           }
           &-list {

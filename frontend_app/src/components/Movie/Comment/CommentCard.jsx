@@ -1,12 +1,16 @@
-import React from 'react'
-import moment from 'moment'
+import React from 'react';
+import moment from 'moment';
+import CommentCardContainer from '../../../containers/Movie/Comment/CommentCardContainer';
 
-export const CommentCard = (props) => {
+export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, closeAnswerForm, addAnswer, serverURL, match }) => {
 
-    const { createdAt, name, comment, answer, id, showAnswer, addAnswer, comment_id } = props
+    const { createdAt, name, comment, answer, id } = elem;
+
+    const answers = comments.filter((item) => item.comment_id === id);
 
     return (
-        <div className="">
+
+        <div className="comment-card">
             <div className="main-article-content-video-commented-list__item">
                 <p className="main-article-content-video-commented-list__item__date">
                     {moment(createdAt).format('YYYY-MM-DD hh:mm')}
@@ -18,18 +22,53 @@ export const CommentCard = (props) => {
                     {comment}
                 </p>
                 <div>
-                    <p onClick={addAnswer}>Ответить</p>
+                    <p data-id={id} onClick={openAnswerForm}>Ответить</p>
+                    <div className="ansrer-container-form" id={`answer-form-${id}`}>
+                        <form action="" onSubmit={addAnswer} data-id={id}>
+                            <div>
+                                <textarea type="text" placeholder="Ответ..." className="inp-def inp-answer" name="comment"></textarea>
+                            </div>
+                            <button type="button" className="btn-main" onClick={closeAnswerForm} data-id={id}>Отмена</button>
+                            <button className="btn-main">Отправить</button>
+                        </form>
+                    </div>
                     {
-                        !!answer
+                        answer
                             ?
-                            <p onClick={showAnswer} data-id={id}>Показать ответы</p>
+                            <p data-id={id} onClick={openAnswerList}>Показать ответы</p>
                             :
-                            <p></p>
+                            null
                     }
                 </div>
             </div>
-            <div className="comment-answer" id={`answer-${id}`}>
+            <div className="comment-answer-list" id={`answer-${id}`} style={{ marginLeft: '50px' }}>
+                {
+                    !!answers
+                        ?
+                        answers.map((elem, i) => {
+
+                            const { comment_id } = elem
+
+                            return (
+                                comment_id
+                                    ?
+                                    <CommentCardContainer
+                                        elem={elem}
+                                        comments={comments}
+                                        serverURL={serverURL}
+                                        match={match}
+                                        key={i}
+                                    />
+                                    :
+                                    null
+                            )
+
+                        })
+                        :
+                        null
+                }
             </div>
         </div>
+
     )
 }

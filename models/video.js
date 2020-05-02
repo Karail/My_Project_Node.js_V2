@@ -30,7 +30,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     }
-  }, {});
+  }, {
+    indexes: [ 
+      {
+        name: 'name',
+        method: 'FULLTEXT',
+        fields: [ 'name' ]
+      },
+    ]
+  });
   Video.associate = function (models) {
     // associations can be defined here
   };

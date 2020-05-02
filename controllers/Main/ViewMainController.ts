@@ -68,7 +68,8 @@ class ViewMainController extends ViewBaseFunc {
                     {
                         id: {
                             [Op.ne]: video.id
-                        }
+                        },
+                        private: false,
                     },
                     Sequelize.literal('MATCH (name) AGAINST (:name)')
                 ],
@@ -106,7 +107,8 @@ class ViewMainController extends ViewBaseFunc {
                 where: {
                     name: {
                         [Op.like]: `%${name}%`,
-                    }
+                    },
+                    private: false,
                 }
             })
             const nextOffset = +offset + +limit

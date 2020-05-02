@@ -18,7 +18,7 @@ class ActionUserController {
         try {
 
             const { comment, video_id } = req.body
-
+            const comment_id = req.body.comment_id || null
             const { name } = req.user
 
             console.log(req.body);
@@ -26,21 +26,25 @@ class ActionUserController {
 
             if (!comment) return res.status(400).send({ message: 'Не корректные данные' })
 
-            await Comment.create({
+            const newConmment = await Comment.create({
                 name,
                 comment: comment.trim(),
                 video_id,
+                comment_id,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })
 
-            const items = await Comment.findAll({
-                order: [['id', 'DESC']],
-                where: {
-                    video_id,
-                }
-            })
-            res.json(items)
+            if (comment_id) {
+                await Comment.update({
+                    answer: 1,
+                }, {
+                    where: { id: req.body.comment_id }
+                })
+            }
+
+            res.json(newConmment)
+
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })

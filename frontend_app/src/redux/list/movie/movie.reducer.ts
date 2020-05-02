@@ -38,11 +38,13 @@ export default (state: initialStateType = initialState, action: actionReturnType
                 isReady: true,
             }
         case 'ADD_COMMENT':
+            state.items.comment.push(action.payload);
+            state.items.comment.sort(function(a, b) { return b.id - a.id; });
             return {
                 ...state,
                 items: {
                     ...state.items,
-                    comment: action.payload
+                    comment: state.items.comment
                 },
                 isReady: true,
             }

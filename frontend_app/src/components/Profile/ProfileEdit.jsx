@@ -1,10 +1,10 @@
 import React from 'react'
 import { ProfileSelectList } from './ProfileSelectList';
-export const ProfileUpload = (props) => {
-    const { uploadVideo, name, privateCheck } = props
+export const ProfileEdit = (props) => {
+    const { editVideo, name, privateCheck } = props
     return (
         <div className="profile">
-            <form onSubmit={uploadVideo}>
+            <form onSubmit={editVideo}>
                 <div>
                     <input
                         defaultValue={name}
@@ -15,24 +15,16 @@ export const ProfileUpload = (props) => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="" className="text-def">
-                        <input
-                            type="file"
-                            name="file"
-                        />
-                    </label>
-                </div>
-                <div>
                     <p className="text-def">Сделать приватным</p>
                     <input
-                        defaultChecked={privateCheck}
+                        checked={privateCheck}
                         type="checkbox"
                         name="privateType"
                     />
                 </div>
                 <ProfileSelectList {...props} />
 
-                <button type="submit">Отправить</button>
+                <button type="submit">Изменить</button>
             </form>
         </div>
     )
