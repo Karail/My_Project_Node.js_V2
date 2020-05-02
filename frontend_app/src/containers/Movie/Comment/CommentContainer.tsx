@@ -15,33 +15,43 @@ type PropsType = {
   serverURL: string
   match: match<{ id: string }>
   addComment: (data: itemsCommentType[]) => addCommentType
-  movie: itemsMovieType,
+  movie: itemsMovieType
 }
 
 class CommentContainer extends React.Component<PropsType> {
 
-  addCommentForm = async (e: any) => {
+  addCommentSubmit = async (e: any) => {
     try {
       e.preventDefault()
-
+      console.log(typeof e);
       if (!getCookie('token')) {
         alert('Войдите в систему')
       } else {
-        const { serverURL, match, addComment } = this.props;
-        const video_id = match.params.id
+        e.preventDefault()
+
+        const { serverURL, addComment, match } = this.props;
+
+        const { dataset } = e.target
 
         const formData = new FormData(e.target)
-        formData.append('video_id', video_id)
+
+        formData.append('video_id', match.params.id);
+
+        if (dataset) {
+          if (dataset.id) {
+            formData.append('comment_id', dataset.id);
+          }
+        }
 
         const response = await fetch(`${serverURL}/addComment`, {
-          method: 'POST',
+          method: 'post',
           credentials: 'include',
-          body: formData,
-        });
-
-        const data = await response.json()
-        console.log(data)
+          body: formData
+        })
+        const data: itemsCommentType[] = await response.json();
+        console.log(data);
         addComment(data)
+
       }
     } catch (err) {
       console.log(err);
@@ -52,7 +62,7 @@ class CommentContainer extends React.Component<PropsType> {
     return (
       <div>
         <Comment
-          addCommentForm={this.addCommentForm}
+          addCommentSubmit={this.addCommentSubmit}
           {...this.props}
         />
       </div>

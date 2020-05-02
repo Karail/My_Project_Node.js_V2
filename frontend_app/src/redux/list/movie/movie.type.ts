@@ -19,7 +19,7 @@ export type updateLikeDislikeType = {
 
 export type addCommentType = {
     type: 'ADD_COMMENT',
-    payload: itemsCommentType,
+    payload: itemsCommentType[],
 }
 
 export type updateViewsType = {

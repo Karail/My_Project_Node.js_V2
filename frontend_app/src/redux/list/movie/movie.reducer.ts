@@ -1,6 +1,7 @@
 
 import { initialStateType, actionReturnType } from './movie.type'
 import { itemsVideoType } from '../../../type/video.type'
+import { itemsCommentType } from '../../../type/comment.type';
 
 const initialState: initialStateType = {
     isReady: false,
@@ -38,13 +39,11 @@ export default (state: initialStateType = initialState, action: actionReturnType
                 isReady: true,
             }
         case 'ADD_COMMENT':
-            state.items.comment.push(action.payload);
-            state.items.comment.sort(function(a, b) { return b.id - a.id; });
             return {
                 ...state,
                 items: {
                     ...state.items,
-                    comment: state.items.comment
+                    comment: action.payload
                 },
                 isReady: true,
             }

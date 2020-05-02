@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import CommentCardContainer from '../../../containers/Movie/Comment/CommentCardContainer';
 
-export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, closeAnswerForm, addAnswer, serverURL, match }) => {
+export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, closeAnswerForm, addCommentSubmit, serverURL, match }) => {
 
     const { createdAt, name, comment, answer, id } = elem;
 
@@ -24,7 +24,7 @@ export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, cl
                 <div>
                     <p data-id={id} onClick={openAnswerForm}>Ответить</p>
                     <div className="ansrer-container-form" id={`answer-form-${id}`}>
-                        <form action="" onSubmit={addAnswer} data-id={id}>
+                        <form action="" onSubmit={addCommentSubmit} data-id={id}>
                             <div>
                                 <textarea type="text" placeholder="Ответ..." className="inp-def inp-answer" name="comment"></textarea>
                             </div>
@@ -57,6 +57,7 @@ export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, cl
                                         comments={comments}
                                         serverURL={serverURL}
                                         match={match}
+                                        addCommentSubmit={addCommentSubmit}
                                         key={i}
                                     />
                                     :

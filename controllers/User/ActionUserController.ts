@@ -43,7 +43,14 @@ class ActionUserController {
                 })
             }
 
-            res.json(newConmment)
+              const items = await Comment.findAll({
+                order: [['id', 'DESC']],
+                where: {
+                    video_id,
+                }
+            })
+
+            res.json(items)
 
         } catch (err) {
             console.log(err)
@@ -416,6 +423,7 @@ class ActionUserController {
             res.status(500).send({ message: 'Что то пошло не так' })
         }
     }
+
 }
 
 export default new ActionUserController

@@ -1,7 +1,7 @@
 import React from 'react';
 import CommentCardContainer from '../../../containers/Movie/Comment/CommentCardContainer';
 
-export const CommentList = ({ comments, serverURL, match }) => {
+export const CommentList = ({ comments, serverURL, match, addCommentSubmit }) => {
 
     return (
         <div>
@@ -20,6 +20,7 @@ export const CommentList = ({ comments, serverURL, match }) => {
                                     comments={comments}
                                     serverURL={serverURL}
                                     match={match}
+                                    addCommentSubmit={addCommentSubmit}
                                     key={i}
                                 />
                                 :

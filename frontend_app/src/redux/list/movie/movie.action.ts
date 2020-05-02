@@ -14,7 +14,7 @@ export const updateLikeDislike = (data: likeDislikeType): updateLikeDislikeType 
     payload: data
 });
 
-export const addComment = (data: itemsCommentType): addCommentType => ({
+export const addComment = (data: itemsCommentType[]): addCommentType => ({
     type: 'ADD_COMMENT',
     payload: data
 });
