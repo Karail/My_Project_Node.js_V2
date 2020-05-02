@@ -12,6 +12,12 @@ type optionsType = {
   label: string
 }
 
+type modelsGroupType = {
+  category: itemsModelType[]
+  model: itemsModelType[]
+  studio: itemsModelType[]
+}
+
 type StateType = {
   optionsCategory: optionsType[]
   optionsModel: optionsType[]
@@ -50,28 +56,41 @@ abstract class ProfileEditorAbstract extends React.Component<PropsType, StateTyp
     return newState
   }
 
-  async updateState(url: string) {
-    try {
-      const { serverURL } = this.props
-      const response = await fetch(`${serverURL}/${url}`)
-      const data: itemsModelType[] = await response.json()
-      return this.likenDataToState(data)
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   async componentDidMount() {
-    const category = await this.updateState('category')
-    const model = await this.updateState('model')
-    const studio = await this.updateState('studio')
-    if (category && model && studio) {
+    try {
+
+      const { serverURL } = this.props
+
+      const  response = await fetch(`${serverURL}/modelsForSelect`)
+
+      const data: modelsGroupType = await response.json()
+
+      const category = this.likenDataToState(data.category);
+      const model = this.likenDataToState(data.model);
+      const studio = this.likenDataToState(data.studio);
+
       this.setState({
         optionsCategory: category,
         optionsModel: model,
         optionsStudio: studio
       })
+
+    } catch (err) {
+      console.log(err)
     }
+  }
+
+  onInputChangePrivate = (e: any) => {
+    this.setState({ privateCheck: e.target.checked });
+  }
+  onInputChangeCategory = (e: any) => {
+    this.setState({ valueCategory: e });
+  }
+  onInputChangeModel = (e: any) => {
+    this.setState({ valueModel: e });
+  }
+  onInputChangeStudio = (e: any) => {
+    this.setState({ valueStudio: e });
   }
 
 }

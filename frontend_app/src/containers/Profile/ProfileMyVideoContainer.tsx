@@ -53,26 +53,11 @@ class ProfileMyVideoContainer extends React.Component<PropsType> {
     }
   }
 
-  removeMy = async (id: number) => {
-    try {
-      const { setVideo, serverURL } = this.props
-      const response = await fetch(`${serverURL}/removeMyVideo?video_id=${id}`, {
-        method: 'delete',
-        credentials: 'include',
-      })
-      const data = await response.json()
-      setVideo(data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   render() {
     const { setSearchQuery, video } = this.props
     return (
       <ModelList
         items={video}
-        removeMy={this.removeMy}
         setSearchQuery={setSearchQuery}
         Card={ProfileMyVideoCard}
         playVideo={playVideo}

@@ -22,4 +22,6 @@ router.delete('/removeMyVideo', checkAuth, ActionUser.removeMyVideo.bind(ActionU
 
 router.get('/updateViews', ActionUser.updateViews.bind(ActionUser))
 
+router.post('/editMyVideo', upload.array(), checkAuth, ActionUser.editMyVideo.bind(ActionUser))
+
 export default router

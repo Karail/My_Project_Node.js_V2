@@ -43,7 +43,7 @@ class ActionUserController {
                 })
             }
 
-              const items = await Comment.findAll({
+            const items = await Comment.findAll({
                 order: [['id', 'DESC']],
                 where: {
                     video_id,
@@ -325,7 +325,7 @@ class ActionUserController {
                     })
                 }
 
-                res.json('file add')
+                res.json(video)
 
             } catch (err) {
                 console.log(err)
@@ -352,58 +352,145 @@ class ActionUserController {
                 }
             })
 
-            await Comment.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await LikeSubscriber.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await DislikeSubscriber.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await VideoCategory.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await VideoModel.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await VideoStudio.destroy({
-                where: {
-                    video_id,
-                }
-            })
-            await Video.destroy({
-                where: {
-                    id: video_id,
-                    user_id
-                }
-            })
+            if (videoItems) {
+                await Comment.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await LikeSubscriber.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await DislikeSubscriber.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await VideoCategory.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await VideoModel.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await VideoStudio.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await Video.destroy({
+                    where: {
+                        id: video_id,
+                        user_id
+                    }
+                })
 
-            await AWS.awsDeleteFile('/video', videoItems.fileName)
+                await AWS.awsDeleteFile('/video', videoItems.fileName)
 
-            await AWS.awsDeleteFile('/video/preview', videoItems.fileName)
+                await AWS.awsDeleteFile('/video/preview', videoItems.fileName)
 
-            const items = await Video.findAll({
-                order: [['id', 'DESC']],
-                where: {
-                    user_id
-                }
-            })
-
-            res.json(items)
+                res.send({
+                    deleted: true
+                })
+            } else {
+                throw new Error('Видео не найдено')
+            }
         } catch (err) {
             console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            res.status(500).send({ message: err.message })
+        }
+    }
+
+    async editMyVideo(req: IUserRequest, res: Response) {
+        try {
+
+
+            const user_id = req.user.id
+
+            const video_id = req.query.video_id
+
+            const videoItems = await Video.findOne({
+                where: {
+                    id: video_id,
+                    user_id,
+                }
+            })
+            if (videoItems) {
+                let privat = videoItems.private;
+      
+                const { name, category, model, studio, privateType } = req.body
+
+                if (privateType) {
+                    privat = 1
+                } else {
+                    privat = 0
+                }
+
+                console.log(privat)
+                const video = await Video.update({
+                    name,
+                    private: privat
+
+                }, {
+                    where: {
+                        user_id,
+                        id: video_id,
+                    }
+                })
+
+                await VideoCategory.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await VideoModel.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                await VideoStudio.destroy({
+                    where: {
+                        video_id,
+                    }
+                })
+                console.log(category)
+                for (let id of category) {
+                    await VideoCategory.create({
+                        category_id: id,
+                        video_id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+                for (let id of model) {
+                    await VideoModel.create({
+                        model_id: id,
+                        video_id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+                for (let id of studio) {
+                    await VideoStudio.create({
+                        studio_id: id,
+                        video_id,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+                }
+                res.json(videoItems)
+            } else {
+                throw new Error('Видео не найдено')
+            }
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: err.message })
         }
     }
 

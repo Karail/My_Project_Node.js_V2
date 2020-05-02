@@ -3,12 +3,14 @@ import { Request, Response } from 'express'
 
 const { Video } = require('../../models/control.js')
 
+import Sequelize from 'sequelize'
+const Op = Sequelize.Op;
 
 export default abstract class ViewBaseFunc {
 
     protected async resVideoOffset(req: Request, res: Response, thwoModel?: any, tableId?: any) {
         try {
-  
+
             let items
 
             if (tableId && thwoModel) {
@@ -52,8 +54,21 @@ export default abstract class ViewBaseFunc {
 
     protected async resModel(res: Response, model: any) {
         try {
-            const items = await model.findAll({ order: [['id', 'DESC']] })
-            res.json(items)
+            const data = await model.findAll({
+                order: [['id', 'DESC']],
+                include: [{
+                    model: Video,
+                    through: {
+                        where: {
+                            video_id: {
+                                [Op.not]: null
+                            }
+                        },
+                    },
+                    required: true
+                }]
+            })
+            res.json(data)
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })

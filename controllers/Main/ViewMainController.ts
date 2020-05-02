@@ -121,6 +121,29 @@ class ViewMainController extends ViewBaseFunc {
             res.status(500).send({ message: 'Что то пошло не так' })
         }
     }
+
+    async showModelsForSelect(req: Request, res: Response) {
+        try {
+            const category = await Category.findAll({
+                order: [['id', 'DESC']],
+            })
+            const model = await Model.findAll({
+                order: [['id', 'DESC']],
+            })
+            const studio = await Studio.findAll({
+                order: [['id', 'DESC']],
+            })
+            console.log(category)
+            res.json({
+                category,
+                model,
+                studio
+            })
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: 'Что то пошло не так' })
+        }
+    }
 }
 
 

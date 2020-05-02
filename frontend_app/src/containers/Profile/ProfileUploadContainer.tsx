@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProfileUpload } from '../../components/Profile/ProfileUpload';
 import ProfileEditorAbstract from './abstract/ProfileEditorAbstract';
-
+import { itemsVideoType } from '../../type/video.type';
 class ProfileUploadContainer extends ProfileEditorAbstract {
 
   uploadVideo = async (e: any) => {
@@ -20,13 +20,13 @@ class ProfileUploadContainer extends ProfileEditorAbstract {
         body: formData,
       });
 
-      const data = await response.json()
+      const data: itemsVideoType = await response.json()
 
       if (response.status != 200) {
         throw data
       }
 
-      alert(data)
+      location.href = `/movie/${data.id}`
 
     } catch (err) {
       console.log(err)
@@ -47,6 +47,11 @@ class ProfileUploadContainer extends ProfileEditorAbstract {
 
         name={this.state.name}
         privateCheck={this.state.privateCheck}
+        
+        onInputChangePrivate={this.onInputChangePrivate}
+        onInputChangeCategory={this.onInputChangeCategory}
+        onInputChangeModel={this.onInputChangeModel}
+        onInputChangeStudio={this.onInputChangeStudio}
       />
     )
   }

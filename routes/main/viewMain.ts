@@ -21,4 +21,6 @@ router.get('/movie/:id', ViewMain.showMovie.bind(ViewMain))
 
 router.get('/search/:name', ViewMain.showVideoSearch.bind(ViewMain))
 
+router.get('/modelsForSelect', ViewMain.showModelsForSelect.bind(ViewMain))
+
 export default router

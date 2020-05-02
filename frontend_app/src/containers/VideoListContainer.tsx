@@ -43,7 +43,7 @@ class VideoListContainer extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      sort: 'id'
+      sort: 'like'
     }
   }
 

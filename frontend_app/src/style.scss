@@ -25,7 +25,12 @@ a {
   text-decoration: none;
   color: $col-text;
 }
-
+.comment-card-header {
+  display: flex;
+}
+.main-article-content-video-commented-list__item p {
+  margin-left: 10px;
+}
 .text {
   &-def {
     color: $col-text;

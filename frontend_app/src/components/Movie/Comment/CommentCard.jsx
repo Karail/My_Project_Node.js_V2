@@ -12,12 +12,14 @@ export const CommentCard = ({ comments, elem, openAnswerList, openAnswerForm, cl
 
         <div className="comment-card">
             <div className="main-article-content-video-commented-list__item">
-                <p className="main-article-content-video-commented-list__item__date">
-                    {moment(createdAt).format('YYYY-MM-DD hh:mm')}
-                </p>
-                <p className="main-article-content-video-commented-list__item__name">
-                    {name}
-                </p>
+                <div className="comment-card-header">
+                    <p className="main-article-content-video-commented-list__item__date">
+                        {moment(createdAt).format('YYYY-MM-DD hh:mm')}
+                    </p>
+                    <p className="main-article-content-video-commented-list__item__name">
+                        {name}
+                    </p>
+                </div>
                 <p className="main-article-content-video-commented-list__item__text">
                     {comment}
                 </p>

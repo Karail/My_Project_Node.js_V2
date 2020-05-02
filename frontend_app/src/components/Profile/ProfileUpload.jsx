@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProfileSelectList } from './ProfileSelectList';
 export const ProfileUpload = (props) => {
-    const { uploadVideo, name, privateCheck } = props
+    const { uploadVideo, name, privateCheck, onInputChangePrivate } = props
     return (
         <div className="profile">
             <form onSubmit={uploadVideo}>
@@ -25,9 +25,10 @@ export const ProfileUpload = (props) => {
                 <div>
                     <p className="text-def">Сделать приватным</p>
                     <input
-                        defaultChecked={privateCheck}
+                        value={privateCheck}
                         type="checkbox"
                         name="privateType"
+                        onChange={onInputChangePrivate}
                     />
                 </div>
                 <ProfileSelectList {...props} />

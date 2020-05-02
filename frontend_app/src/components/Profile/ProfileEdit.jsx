@@ -1,10 +1,10 @@
 import React from 'react'
 import { ProfileSelectList } from './ProfileSelectList';
 export const ProfileEdit = (props) => {
-    const { editVideo, name, privateCheck } = props
+    const { name, privateCheck, onInputChangePrivate, removeMy, editMy } = props
     return (
         <div className="profile">
-            <form onSubmit={editVideo}>
+            <form onSubmit={editMy}>
                 <div>
                     <input
                         defaultValue={name}
@@ -20,11 +20,13 @@ export const ProfileEdit = (props) => {
                         checked={privateCheck}
                         type="checkbox"
                         name="privateType"
+                        onChange={onInputChangePrivate}
                     />
                 </div>
                 <ProfileSelectList {...props} />
 
-                <button type="submit">Изменить</button>
+                <button type="submit" className="btn-def">Изменить</button>
+                <button className="btn-def" type="button" onClick={removeMy}>Удалить</button>
             </form>
         </div>
     )
