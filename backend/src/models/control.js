@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../db/db')
+const sequelize = require('../../db/db')
 
 
 let Video = require('./video.js')(sequelize, Sequelize)

@@ -1,5 +1,5 @@
 
-const { AWSconf } = require('../../config/conf.js')
+const { AWSconf } = require('../../../config/conf.js')
 import s3 from '../../middleware/aws';
 import FileMethods from './FileMethods';
 

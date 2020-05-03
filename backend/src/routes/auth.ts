@@ -4,7 +4,7 @@
 import Auth from '../controllers/AuthController'
 import {Router} from 'express';
 import multer from 'multer'
-const upload: any = multer({ dest: 'uploads/' })
+const upload: any = multer()
 
 const router = Router()
 

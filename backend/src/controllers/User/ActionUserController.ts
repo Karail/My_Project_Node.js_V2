@@ -5,7 +5,7 @@ import FileMethods from '../abstract/FileMethods';
 import ffmpeg from 'ffmpeg'
 const { getVideoDurationInSeconds } = require('get-video-duration')
 
-const sequelize = require('../../db/db.js')
+const sequelize = require('../../../db/db.js')
 
 import IUserRequest from '../../intarface/IUserRequest';
 import AWS from '../abstract/AWS';
@@ -248,7 +248,6 @@ class ActionUserController {
 
     async uploadVideo(req: IUserRequest, res: Response) {
         try {
-            console.log(req.body)
             const { name, category, model, studio, privateType } = req.body
 
             let privat = 0;
@@ -258,10 +257,10 @@ class ActionUserController {
             } else if (!req.file) {
                 throw new Error('Загрузите файл');
             }
-
-            const filePath = path.join(__dirname, '..', '..', req.file.path)
+            console.log(req.file)
+            const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
             const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
-
+            console.log(filePathPreview)
             try {
 
                 if (privateType) {
@@ -331,8 +330,8 @@ class ActionUserController {
                 console.log(err)
                 res.status(500).send({ message: 'Что то пошло не так' })
             } finally {
-                await FileMethods.deleteFile(filePath)
-                await FileMethods.deleteFile(filePathPreview)
+                // await FileMethods.deleteFile(filePath)
+                // await FileMethods.deleteFile(filePathPreview)
             }
         } catch (err) {
             res.status(500).send({ message: err.message })

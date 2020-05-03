@@ -9,10 +9,10 @@ const Op = Sequelize.Op;
 
 const { Subscriber } = require('../models/control.js')
 
-const { JWTconf } = require('../config/conf.js')
+const { JWTconf } = require('../../config/conf.js')
 
 import resetEmail from '../email/resetPassword'
-import transporter from '../email/';
+import transporter from '../email';
 
 import { TokenBodyType } from '../intarface/IUserRequest';
 

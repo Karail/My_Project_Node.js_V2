@@ -1,7 +1,7 @@
 
 import nodemailer from 'nodemailer';
 const sendgrid = require('nodemailer-sendgrid-transport')
-const { EMAILconf } = require('../config/conf.js')
+const { EMAILconf } = require('../../config/conf.js')
 
 const transporter = nodemailer.createTransport(sendgrid({
     auth: {

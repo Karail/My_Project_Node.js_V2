@@ -2,7 +2,7 @@
 
 
 import { Request, Response, NextFunction } from 'express';
-const { JWTconf } = require('../config/conf.js');
+const { JWTconf } = require('../../config/conf.js');
 import jwt from 'jsonwebtoken';
 import IUserRequest from '../intarface/IUserRequest';
 
