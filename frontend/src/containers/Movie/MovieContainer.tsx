@@ -13,6 +13,8 @@ import { setSearchQueryType } from '../../redux/list/filter/filter.type'
 import { rootReducerType } from '../../redux/list'
 import { match } from "react-router";
 
+import { getCookie } from '../../func/cookie';
+
 type PropsType = {
   setMovie: (data: itemsMovieType) => setMovieType
   serverURL: string
@@ -39,7 +41,25 @@ class MovieContainer extends React.Component<PropsType, StateType> {
       const video_id = match.params.id
       const response = await fetch(`${serverURL}/movie/${video_id}`)
       if (response.status === 500) throw new Error()
-      const data = await response.json()
+      const data: itemsMovieType = await response.json()
+
+      if (data.video.private) {
+        if (!!getCookie('token')) {
+
+          const response = await fetch(`${serverURL}/checkPrivate/${video_id}`, {
+            credentials: 'include',
+          })
+          const data: boolean = await response.json()
+
+          if (data) {
+            location.href = '/'
+          }
+
+        } else {
+          location.href = '/'
+        }
+      } 
+
       setMovie(data)
     } catch (err) {
       console.log(err)

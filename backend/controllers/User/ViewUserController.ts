@@ -11,7 +11,7 @@ class ViewUserController {
         const { id } = req.user
 
         try {
-            const items = await Video.findAll({
+            const data = await Video.findAll({
                 order: [['id', 'DESC']],
                 include: [{
                     model: Subscriber,
@@ -24,7 +24,7 @@ class ViewUserController {
                 }],
             })
 
-            res.json(items)
+            res.json(data)
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })
@@ -35,14 +35,33 @@ class ViewUserController {
         const { id } = req.user
 
         try {
-            const items = await Video.findAll({
+            const data = await Video.findAll({
                 order: [['id', 'DESC']],
                 where: {
-                    'user_id': id
+                    user_id: id
                 }
             })
 
-            res.json(items)
+            res.json(data)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: 'Что то пошло не так' })
+        }
+    }
+
+    async checkPrivate(req: IUserRequest, res: Response) {
+        try {
+            const data = await Video.findOne({
+                where: {
+                    user_id: req.user.id,
+                    id: req.params.id
+                }
+            })
+            if (data) {
+                res.json(false)
+            } else {
+                res.json(true)
+            }
         } catch (err) {
             console.log(err)
             res.status(500).send({ message: 'Что то пошло не так' })
