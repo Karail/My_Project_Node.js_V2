@@ -122,7 +122,7 @@ class ViewMainController extends ViewBaseFunc {
         }
     }
 
-    async showModelsForSelect(req: Request, res: Response) {
+    async showAllModels(req: Request, res: Response) {
         try {
             const category = await Category.findAll({
                 order: [['id', 'DESC']],

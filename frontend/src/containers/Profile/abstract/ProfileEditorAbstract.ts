@@ -61,7 +61,7 @@ abstract class ProfileEditorAbstract extends React.Component<PropsType, StateTyp
 
       const { serverURL } = this.props
 
-      const  response = await fetch(`${serverURL}/modelsForSelect`)
+      const  response = await fetch(`${serverURL}/allModels`)
 
       const data: modelsGroupType = await response.json()
 

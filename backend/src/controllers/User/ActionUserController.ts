@@ -251,6 +251,7 @@ class ActionUserController {
             const { name, category, model, studio, privateType } = req.body
 
             let privat = 0;
+            let transaction;
 
             if (!name) {
                 throw new Error('Нет названия');
@@ -288,6 +289,8 @@ class ActionUserController {
 
                 const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
 
+                transaction = await sequelize.transaction();
+
                 const video = await Video.create({
                     name,
                     url: videoAWS.Location,
@@ -297,7 +300,7 @@ class ActionUserController {
                     private: privat,
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                })
+                }, { transaction })
 
                 for (let id of category) {
                     await VideoCategory.create({
@@ -305,7 +308,7 @@ class ActionUserController {
                         video_id: video.id,
                         createdAt: new Date(),
                         updatedAt: new Date(),
-                    })
+                    }, { transaction })
                 }
                 for (let id of model) {
                     await VideoModel.create({
@@ -313,7 +316,7 @@ class ActionUserController {
                         video_id: video.id,
                         createdAt: new Date(),
                         updatedAt: new Date(),
-                    })
+                    }, { transaction })
                 }
                 for (let id of studio) {
                     await VideoStudio.create({
@@ -321,17 +324,21 @@ class ActionUserController {
                         video_id: video.id,
                         createdAt: new Date(),
                         updatedAt: new Date(),
-                    })
+                    }, { transaction })
                 }
+
+                await transaction.commit();
 
                 res.json(video)
 
             } catch (err) {
                 console.log(err)
+                await transaction.rollback();
                 res.status(500).send({ message: 'Что то пошло не так' })
+
             } finally {
-                // await FileMethods.deleteFile(filePath)
-                // await FileMethods.deleteFile(filePathPreview)
+                await FileMethods.deleteFile(filePath)
+                await FileMethods.deleteFile(filePathPreview)
             }
         } catch (err) {
             res.status(500).send({ message: err.message })
@@ -421,7 +428,7 @@ class ActionUserController {
             })
             if (videoItems) {
                 let privat = videoItems.private;
-      
+
                 const { name, category, model, studio, privateType } = req.body
 
                 if (privateType) {
