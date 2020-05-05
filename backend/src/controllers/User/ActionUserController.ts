@@ -258,10 +258,10 @@ class ActionUserController {
             } else if (!req.file) {
                 throw new Error('Загрузите файл');
             }
-            console.log(req.file)
+
             const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
             const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
-            console.log(filePathPreview)
+            
             try {
 
                 if (privateType) {
