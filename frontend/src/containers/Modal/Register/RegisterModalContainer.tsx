@@ -25,7 +25,7 @@ class RegisterModalContainer extends React.Component<PropsType> {
             console.log(data)
 
             if (data.token) {
-                setCookie('token', data.token)
+                setCookie('token', data.token, { 'max-age': 3000 })
                 closeModal()
             }
 

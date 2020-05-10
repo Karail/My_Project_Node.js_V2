@@ -1,46 +1,58 @@
 
+
 import { Request, Response } from 'express'
 
-import ViewBaseFunc from '../abstract/ViewMethods';
+import ViewMethods from '../abstract/ViewMethods';
+import Bind from '../../decorators/Bind';
 
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op;
 
-const { Video, Category, Model, Studio, Tag, Comment } = require('../../models/control.js')
+import { Video, Category, Model, Studio, Tag, Comment } from '../../models/control';
 
+class ViewMainController extends ViewMethods {
 
-class ViewMainController extends ViewBaseFunc {
-
-    async showVideo(req: Request, res: Response) {
+    @Bind
+    showVideo(req: Request, res: Response) {
         this.resVideoOffset(req, res)
     }
 
-    showCategory(req: Request, res: Response) {
+    @Bind
+    showCategory(_: Request, res: Response) {
         this.resModel(res, Category)
     }
 
+    @Bind
     showVideoCategory(req: Request, res: Response) {
         this.resVideoOffset(req, res, Category, 'category_id')
     }
 
-    showModel(req: Request, res: Response) {
+    @Bind
+    showModel(_: Request, res: Response) {
         this.resModel(res, Model)
     }
 
+    @Bind
     showVideoModel(req: Request, res: Response) {
         this.resVideoOffset(req, res, Model, 'model_id')
     }
 
-    showStudio(req: Request, res: Response) {
+    @Bind
+    showStudio(_: Request, res: Response) {
         this.resModel(res, Studio)
     }
 
+    @Bind
     showVideoStudio(req: Request, res: Response) {
         this.resVideoOffset(req, res, Studio, 'studio_id')
     }
+
+    @Bind
     showVideoTag(req: Request, res: Response) {
         this.resVideoOffset(req, res, Tag, 'tag_id')
     }
+
+    @Bind
     async showMovie(req: Request, res: Response) {
         try {
 
@@ -122,7 +134,7 @@ class ViewMainController extends ViewBaseFunc {
         }
     }
 
-    async showAllModels(req: Request, res: Response) {
+    async showAllModels(_: Request, res: Response) {
         try {
             const category = await Category.findAll({
                 order: [['id', 'DESC']],

@@ -8,20 +8,20 @@ const upload: any = multer()
 
 const router = Router()
 
-router.post('/addComment', upload.array(), checkAuth, ActionUser.addComment.bind(ActionUser))
+router.post('/addComment', upload.array(), checkAuth, ActionUser.addComment)
 
-router.delete('/removeLikeVideo', checkAuth, ActionUser.removeLikeVideo.bind(ActionUser))
+router.delete('/removeLikeVideo', checkAuth, ActionUser.removeLikeVideo)
 
-router.get('/addLike', checkAuth, ActionUser.addLike.bind(ActionUser))
+router.get('/addLike', checkAuth, ActionUser.addLike)
 
-router.get('/addDislike', checkAuth, ActionUser.addDislike.bind(ActionUser))
+router.get('/addDislike', checkAuth, ActionUser.addDislike)
 
-router.post('/uploadVideo', fileMiddleware.single('file'), checkAuth, ActionUser.uploadVideo.bind(ActionUser))
+router.post('/uploadVideo', fileMiddleware.single('file'), checkAuth, ActionUser.uploadVideo)
 
-router.delete('/removeMyVideo', checkAuth, ActionUser.removeMyVideo.bind(ActionUser))
+router.delete('/removeMyVideo', checkAuth, ActionUser.removeMyVideo)
 
-router.get('/updateViews', ActionUser.updateViews.bind(ActionUser))
+router.get('/updateViews', ActionUser.updateViews)
 
-router.post('/editMyVideo', upload.array(), checkAuth, ActionUser.editMyVideo.bind(ActionUser))
+router.post('/editMyVideo', upload.array(), checkAuth, ActionUser.editMyVideo)
 
 export default router

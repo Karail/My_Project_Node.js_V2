@@ -31,16 +31,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {
-    indexes: [ 
+    indexes: [
       {
         name: 'name',
         method: 'FULLTEXT',
-        fields: [ 'name' ]
+        fields: ['name']
       },
     ]
   });
   Video.associate = function (models) {
     // associations can be defined here
+    Video.hasMany(models.Comment, {
+      foreignKey: 'video_id'
+    })
   };
   return Video;
 };

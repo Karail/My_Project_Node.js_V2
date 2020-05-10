@@ -1,8 +1,8 @@
 
 
 import { Request, Response } from 'express'
-const { Subscriber, Video } = require('../../models/control.js')
-import IUserRequest from '../../intarface/IUserRequest';
+import { Subscriber, Video } from '../../models/control';
+import IUserRequest from '../../interface/IUserRequest';
 
 class ViewUserController {
 

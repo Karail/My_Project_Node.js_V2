@@ -5,12 +5,21 @@ import FileMethods from '../abstract/FileMethods';
 import ffmpeg from 'ffmpeg'
 const { getVideoDurationInSeconds } = require('get-video-duration')
 
-const sequelize = require('../../../db/db.js')
+import sequelize from '../../../db/db';
 
-import IUserRequest from '../../intarface/IUserRequest';
+import IUserRequest from '../../interface/IUserRequest';
 import AWS from '../abstract/AWS';
 
-const { Video, Comment, Subscriber, LikeSubscriber, DislikeSubscriber, VideoCategory, VideoModel, VideoStudio } = require('../../models/control.js')
+import {
+    Video,
+    Comment,
+    Subscriber,
+    LikeSubscriber,
+    DislikeSubscriber,
+    VideoCategory,
+    VideoModel,
+    VideoStudio
+} from '../../models/control';
 
 class ActionUserController {
 
@@ -19,7 +28,6 @@ class ActionUserController {
 
             const { comment, video_id } = req.body
             const comment_id = req.body.comment_id || null
-            const { name } = req.user
 
             console.log(req.body);
 
@@ -261,7 +269,7 @@ class ActionUserController {
 
             const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
             const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
-            
+
             try {
 
                 if (privateType) {

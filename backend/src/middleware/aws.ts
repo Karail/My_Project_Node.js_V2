@@ -1,6 +1,5 @@
 
-
-const { AWSconf } = require('../../config/conf.js')
+import { AWSconf } from '../../config/conf';
 import AWS_SDK from 'aws-sdk';
 
 AWS_SDK.config.update(

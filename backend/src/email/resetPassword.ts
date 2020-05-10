@@ -1,5 +1,5 @@
 
-const { EMAILconf, MAINconf } = require('../../config/conf.js')
+import { EMAILconf, MAINconf } from '../../config/conf';
 
 export default (email: string, token: string) => {
   return {

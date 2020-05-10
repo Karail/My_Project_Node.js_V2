@@ -2,9 +2,9 @@
 
 
 import { Request, Response, NextFunction } from 'express';
-const { JWTconf } = require('../../config/conf.js');
+import { JWTconf } from '../../config/conf';
 import jwt from 'jsonwebtoken';
-import IUserRequest from '../intarface/IUserRequest';
+import IUserRequest from '../interface/IUserRequest';
 
 function ExtractJwt(req: Request) {
     let token = null
@@ -16,15 +16,15 @@ function ExtractJwt(req: Request) {
 
 export function checkAuth(req: IUserRequest, res: Response, next: NextFunction) {
 
-    const token = ExtractJwt(req)
+    const token = ExtractJwt(req);
 
-    jwt.verify(token, JWTconf.secretOrKey, (error: any, decoded: any) => {
-        if (error) {
-            return res.status(400).send({ error })
+    jwt.verify(token, JWTconf.secretOrKey, (err: any, decoded: any) => {
+        if (err) {
+            return res.status(401).send({ error: err });
         }
-        req.user = decoded
-        next()
-    })
+        req.user = decoded;
+        next();
+    });
 }
 
 

@@ -1,12 +1,17 @@
 
-const { AWSconf } = require('../../../config/conf.js')
+import { AWSconf } from '../../../config/conf';
 import s3 from '../../middleware/aws';
 import FileMethods from './FileMethods';
 
 export default abstract class AWS {
 
     //!S3
-    static async awsUploadFile(staticPath: string, iFile: string, mimetype: string, folderName: string) {
+    static async awsUploadFile(
+        staticPath: string,
+        iFile: string,
+        mimetype: string,
+        folderName: string
+    ) {
 
         const params = await new Promise(async (resolve, reject) => {
             try {

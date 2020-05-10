@@ -2,11 +2,9 @@
 import { Request, CookieOptions } from 'express'
 
 export type TokenBodyType = {
-    id: string,
-    name: string
+    id: number
 }
 
 export default interface IUserRequest extends Request {
     user?: any
-    cookie?: any
 }

@@ -32,9 +32,9 @@ class ProfileLikeContainer extends React.Component<PropsType> {
     try {
       const { setVideo, serverURL, setSearchQuery } = this.props
 
-      const $seacrh = document.querySelector('#search') as HTMLInputElement
+      let seacrh = document.querySelector('#search') as HTMLInputElement
 
-      $seacrh.value = ''
+      seacrh.value = ''
 
       setSearchQuery('')
 

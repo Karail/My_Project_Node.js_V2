@@ -7,15 +7,15 @@ import crypto from 'crypto'
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op;
 
-const { Subscriber } = require('../models/control.js')
+import { Subscriber } from '../models/control';
 
-const { JWTconf } = require('../../config/conf.js')
+import { JWTconf } from '../../config/conf';
 
 import resetEmail from '../email/resetPassword'
 import transporter from '../email';
 
-import { TokenBodyType } from '../intarface/IUserRequest';
-
+import { TokenBodyType } from '../interface/IUserRequest';
+import Bind from '../decorators/Bind';
 
 class AuthController {
 
@@ -27,6 +27,7 @@ class AuthController {
         )
     }
 
+    @Bind
     async register(req: Request, res: Response) {
         try {
             const { email, name, password } = req.body
@@ -50,7 +51,7 @@ class AuthController {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })
-            const token = this.createToken({ id: user.id, name: user.name })
+            const token = this.createToken({ id: user.id })
 
             res.cookie("token", token, {
                 httpOnly: true
@@ -66,6 +67,8 @@ class AuthController {
         }
     }
 
+
+    @Bind
     async login(req: Request, res: Response) {
         try {
 
@@ -81,7 +84,7 @@ class AuthController {
 
             if (!isMatch) return res.status(400).json({ message: 'Неверный пароль' })
 
-            const token = this.createToken({ id: user.id, name: user.name })
+            const token = this.createToken({ id: user.id })
 
             res.cookie("token", token, {
                 httpOnly: true

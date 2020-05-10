@@ -4,23 +4,23 @@ import { Router } from 'express';
 
 const router = Router()
 
-router.get('/', ViewMain.showVideo.bind(ViewMain))
+router.get('/', ViewMain.showVideo)
 
-router.get('/category', ViewMain.showCategory.bind(ViewMain))
-router.get('/category/:id', ViewMain.showVideoCategory.bind(ViewMain))
+router.get('/category', ViewMain.showCategory)
+router.get('/category/:id', ViewMain.showVideoCategory)
 
-router.get('/model', ViewMain.showModel.bind(ViewMain))
-router.get('/model/:id', ViewMain.showVideoModel.bind(ViewMain))
+router.get('/model', ViewMain.showModel)
+router.get('/model/:id', ViewMain.showVideoModel)
 
-router.get('/studio', ViewMain.showStudio.bind(ViewMain))
-router.get('/studio/:id', ViewMain.showVideoStudio.bind(ViewMain))
+router.get('/studio', ViewMain.showStudio)
+router.get('/studio/:id', ViewMain.showVideoStudio)
 
-router.get('/tag/:id', ViewMain.showVideoTag.bind(ViewMain))
+router.get('/tag/:id', ViewMain.showVideoTag)
 
-router.get('/movie/:id', ViewMain.showMovie.bind(ViewMain))
+router.get('/movie/:id', ViewMain.showMovie)
 
-router.get('/search/:name', ViewMain.showVideoSearch.bind(ViewMain))
+router.get('/search/:name', ViewMain.showVideoSearch)
 
-router.get('/allModels', ViewMain.showAllModels.bind(ViewMain))
+router.get('/allModels', ViewMain.showAllModels)
 
 export default router

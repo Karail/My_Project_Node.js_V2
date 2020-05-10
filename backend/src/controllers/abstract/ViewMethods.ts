@@ -1,19 +1,19 @@
 
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 
-const { Video } = require('../../models/control.js')
+import { Video } from '../../models/control';
 
-import Sequelize from 'sequelize'
+import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
 
-export default abstract class ViewBaseFunc {
+export default abstract class ViewMethod {
 
-    protected async resVideoOffset(req: Request, res: Response, thwoModel?: any, tableId?: any) {
+    protected async resVideoOffset(req: Request, res: Response, thwoModel?: any, tableId?: string) {
         try {
-
-            let items
-
+            let items;
+            console.log(thwoModel, tableId)
             if (tableId && thwoModel) {
+                
                 items = await Video.findAll({
                     offset: +req.query.offset,
                     limit: +req.query.limit,
@@ -30,7 +30,7 @@ export default abstract class ViewBaseFunc {
                     where: {
                         private: false,
                     },
-                })
+                });
             } else {
                 items = await Video.findAll({
                     offset: +req.query.offset,
@@ -39,16 +39,16 @@ export default abstract class ViewBaseFunc {
                     where: {
                         private: false,
                     }
-                })
+                });
             }
-            const nextOffset = +req.query.offset + +req.query.limit
+            const nextOffset = +req.query.offset + +req.query.limit;
             res.json({
                 data: items,
                 nextOffset: nextOffset,
-            })
+            });
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            console.log(err);
+            res.status(500).send({ message: 'Что то пошло не так' });
         }
     }
 
@@ -67,11 +67,11 @@ export default abstract class ViewBaseFunc {
                     },
                     required: true
                 }]
-            })
-            res.json(data)
+            });
+            res.json(data);
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            console.log(err);
+            res.status(500).send({ message: 'Что то пошло не так' });
         }
     }
 
@@ -86,6 +86,6 @@ export default abstract class ViewBaseFunc {
                 },
                 required: true
             }],
-        })
+        });
     }
 }
