@@ -35,12 +35,14 @@ class AuthController {
             console.log(req.body);
 
 
-            if (!name || !password || !email) return res.status(400).send({ message: 'Не корректные данные' })
+            if (!name || !password || !email)
+                return res.status(400).send({ message: 'Не корректные данные' })
 
             const userEmail = await Subscriber.findOne({ where: { email } })
             const username = await Subscriber.findOne({ where: { name } })
 
-            if (userEmail || username) return res.status(400).send({ message: "Пользователь уже зарегестрирован" })
+            if (userEmail || username)
+                return res.status(400).send({ message: "Пользователь уже зарегестрирован" })
 
             const hashedPassword = await bcrypt.hash(password, 12)
 
@@ -74,15 +76,18 @@ class AuthController {
 
             const { email, password } = req.body
 
-            if (!email || !password) return res.status(400).send({ message: 'Не корректные данные' })
+            if (!email || !password)
+                return res.status(400).send({ message: 'Не корректные данные' })
 
             const user = await Subscriber.findOne({ where: { email } })
 
-            if (!user) return res.status(400).json({ message: 'Пользователь не найден' })
+            if (!user)
+                return res.status(400).json({ message: 'Пользователь не найден' })
 
             const isMatch = await bcrypt.compare(password, user.password)
 
-            if (!isMatch) return res.status(400).json({ message: 'Неверный пароль' })
+            if (!isMatch)
+                return res.status(400).json({ message: 'Неверный пароль' })
 
             const token = this.createToken({ id: user.id })
 
