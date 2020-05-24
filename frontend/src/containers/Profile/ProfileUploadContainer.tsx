@@ -20,13 +20,13 @@ class ProfileUploadContainer extends ProfileEditorAbstract {
         body: formData,
       });
 
-      const data: itemsVideoType = await response.json()
+      const data: number | Error = await response.json()
 
       if (response.status != 200) {
         throw data
       }
 
-      location.href = `/movie/${data.id}`
+      location.href = `/movie/${data}`
 
     } catch (err) {
       console.log(err)

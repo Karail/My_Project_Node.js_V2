@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import path from 'path';
 import FileMethods from '../abstract/FileMethods';
 import ffmpeg from 'ffmpeg'
+import { Worker } from 'worker_threads';
 const { getVideoDurationInSeconds } = require('get-video-duration')
 
 import sequelize from '../../../db/db';
@@ -256,10 +257,7 @@ class ActionUserController {
 
     async uploadVideo(req: IUserRequest, res: Response) {
         try {
-            const { name, category, model, studio, privateType } = req.body
-
-            let privat = 0;
-            let transaction;
+            const { name } = req.body
 
             if (!name) {
                 throw new Error('Нет названия');
@@ -270,86 +268,40 @@ class ActionUserController {
             const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
             const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
 
-            try {
+            const duration: number = await getVideoDurationInSeconds(filePath)
 
-                if (privateType) {
-                    privat = 1
-                }
+            const newDuration = Math.round(duration / 2)
 
-                const duration: number = await getVideoDurationInSeconds(filePath)
-
-                const newDuration = Math.round(duration / 2)
-
-                let videoPreview = await new ffmpeg(filePath);
-
-                await new Promise((resolve, reject) => {
-                    videoPreview
-                        .setVideoStartTime(String(newDuration))
-                        .setVideoDuration('3')
-                        .save(filePathPreview, (error, file) => {
-                            if (error)
-                                reject(error)
-                            resolve(file)
-                        });
-                })
-
-                const videoAWS = await AWS.awsUploadFile(filePath, req.file.filename, req.file.mimetype, '/video')
-
-                const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
-
-                transaction = await sequelize.transaction();
-
-                const video = await Video.create({
-                    name,
-                    url: videoAWS.Location,
-                    fileName: req.file.filename,
-                    user_id: req.user.id,
-                    preview: previewAWS.Location,
-                    private: privat,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                }, { transaction })
-
-                for (let id of category) {
-                    await VideoCategory.create({
-                        category_id: id,
-                        video_id: video.id,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }, { transaction })
-                }
-                for (let id of model) {
-                    await VideoModel.create({
-                        model_id: id,
-                        video_id: video.id,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }, { transaction })
-                }
-                for (let id of studio) {
-                    await VideoStudio.create({
-                        studio_id: id,
-                        video_id: video.id,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }, { transaction })
-                }
-
-                await transaction.commit();
-
-                res.json(video)
-
-            } catch (err) {
-                console.log(err)
-                await transaction.rollback();
-                res.status(500).send({ message: 'Что то пошло не так' })
-
-            } finally {
-                await FileMethods.deleteFile(filePath)
-                await FileMethods.deleteFile(filePathPreview)
+            const newReq = {
+                body: req.body,
+                file: req.file,
+                user: req.user,
             }
+
+            const worker = new Worker(
+                path.join(__dirname, '..', '..', 'services', 'upload.imp.js'),
+                {
+                    workerData: {
+                        req: newReq,
+                        filePath,
+                        filePathPreview,
+                        newDuration
+                    }
+                }
+            )
+
+            worker.on('message', msg => {
+                if (msg.name === 'video') {
+                    res.json(msg.msg)
+                } 
+                else if (msg.name === 'err') {
+                    res.status(500).send({ message: msg.msg })
+                }
+            });
+
         } catch (err) {
             res.status(500).send({ message: err.message })
+            console.log(err)
         }
     }
 
