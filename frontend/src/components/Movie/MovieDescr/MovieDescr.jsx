@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const MovieDescr = ({ movie, likeFunc, dislikeFunc }) => {
+export const MovieDescr = ({ movie, updateScore }) => {
 
     const { video, category, tag, model, studio } = movie
-    
+
     return (
         <div className="main-article-content-video-descr">
             <div className="main-article-content-video-descr-list">
@@ -41,8 +41,18 @@ export const MovieDescr = ({ movie, likeFunc, dislikeFunc }) => {
                         </div>
                     </div>
                     <div className="">
-                        <button onClick={likeFunc} className="btn-like">Like {video.like}</button>
-                        <button onClick={dislikeFunc} className="btn-dislike">Dislike {video.dislike}</button>
+                        <button
+                            onClick={() => updateScore('addLike')}
+                            className="btn-like"
+                        >
+                            Like {video.like}
+                        </button>
+                        <button
+                            onClick={() => updateScore('addDislike')}
+                            className="btn-dislike"
+                        >
+                            Dislike {video.dislike}
+                        </button>
                     </div>
                 </div>
                 <div className="main-article-content-video-descr-list-tag main-article-content-video-descr-list-padding">
@@ -51,7 +61,6 @@ export const MovieDescr = ({ movie, likeFunc, dislikeFunc }) => {
                             tag.map((elem, i) => (<a href={`/tag/${elem.id}`} key={i}><span>#{elem.name}</span></a>))
                         }
                     </p>
-
                 </div>
             </div>
         </div>

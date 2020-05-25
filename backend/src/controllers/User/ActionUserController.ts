@@ -1,8 +1,6 @@
 
 import { Request, Response } from 'express'
 import path from 'path';
-import FileMethods from '../abstract/FileMethods';
-import ffmpeg from 'ffmpeg'
 import { Worker } from 'worker_threads';
 const { getVideoDurationInSeconds } = require('get-video-duration')
 
@@ -106,23 +104,26 @@ class ActionUserController {
     async addLike(req: IUserRequest, res: Response) {
         try {
             const subscriber_id = req.user.id
-            const video_id = req.query.id
-            const like = req.query.like
-            const dislike = req.query.dislike
+            const video_id = req.body.id
+            const like = req.body.like
+            const dislike = req.body.dislike
 
             let data: { like: number, dislike: number } = {
                 like,
                 dislike,
             }
 
-            const itemDis = await DislikeSubscriber.findOne({
+            const itemDislike = await DislikeSubscriber.findOne({
                 where: {
                     video_id,
                     subscriber_id,
                 }
             })
 
-            if (itemDis) {
+            if (itemDislike) {
+
+                await sequelize.query("UPDATE videos SET `dislike` = `dislike` - 1 WHERE id = " + video_id);
+
                 await DislikeSubscriber.destroy({
                     where: {
                         video_id,
@@ -130,7 +131,6 @@ class ActionUserController {
 
                     }
                 })
-                await sequelize.query("UPDATE videos SET `dislike` = `dislike` - 1 WHERE id = " + video_id);
 
                 data.dislike = +dislike - 1
             }
@@ -183,9 +183,9 @@ class ActionUserController {
     async addDislike(req: IUserRequest, res: Response) {
         try {
             const subscriber_id = req.user.id
-            const video_id = req.query.id
-            const like = req.query.like
-            const dislike = req.query.dislike
+            const video_id = req.body.id
+            const like = req.body.like
+            const dislike = req.body.dislike
 
             let data: { like: number, dislike: number } = {
                 like,
@@ -213,14 +213,14 @@ class ActionUserController {
             }
 
 
-            const itemDis = await DislikeSubscriber.findOne({
+            const itemDislike = await DislikeSubscriber.findOne({
                 where: {
                     video_id,
                     subscriber_id,
                 }
             })
 
-            if (!itemDis) {
+            if (!itemDislike) {
 
                 await sequelize.query("UPDATE videos SET `dislike` = `dislike` + 1 WHERE id = " + video_id);
 
@@ -272,17 +272,15 @@ class ActionUserController {
 
             const newDuration = Math.round(duration / 2)
 
-            const newReq = {
-                body: req.body,
-                file: req.file,
-                user: req.user,
-            }
-
             const worker = new Worker(
                 path.join(__dirname, '..', '..', 'services', 'upload.imp.js'),
                 {
                     workerData: {
-                        req: newReq,
+                        req: {
+                            body: req.body,
+                            file: req.file,
+                            user: req.user,
+                        },
                         filePath,
                         filePathPreview,
                         newDuration
@@ -462,7 +460,8 @@ class ActionUserController {
 
     async updateViews(req: Request, res: Response) {
         try {
-            const video_id = req.query.video_id;
+            const video_id = req.body.video_id;
+            console.log(video_id)
             await sequelize.query("UPDATE videos SET `views` = `views` + 1 WHERE id = " + video_id);
             const data = await Video.findOne({
                 where: {

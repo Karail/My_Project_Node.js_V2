@@ -19,6 +19,8 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
 
     try {
 
+        transaction = await sequelize.transaction();
+
         const { name, category, model, studio, privateType } = req.body
 
         let privat = 0;
@@ -41,7 +43,7 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
 
         const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
 
-        transaction = await sequelize.transaction();
+     
 
         const video = await Video.create({
             name,
@@ -92,7 +94,7 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
         }
 
     } catch (err) {
-        
+
         console.log(err)
 
         await transaction.rollback();

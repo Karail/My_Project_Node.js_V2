@@ -58,7 +58,7 @@ class MovieContainer extends React.Component<PropsType, StateType> {
         } else {
           location.href = '/'
         }
-      } 
+      }
 
       setMovie(data)
     } catch (err) {
@@ -78,7 +78,15 @@ class MovieContainer extends React.Component<PropsType, StateType> {
 
       const video_id = match.params.id
 
-      const response = await fetch(`${serverURL}/updateViews?video_id=${video_id}`);
+      const response = await fetch(`${serverURL}/updateViews`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+          video_id,
+        })
+      });
       const data = await response.json();
       updateViews(data.views)
     }

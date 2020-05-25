@@ -12,15 +12,15 @@ router.post('/addComment', upload.array(), checkAuth, ActionUser.addComment)
 
 router.delete('/removeLikeVideo', checkAuth, ActionUser.removeLikeVideo)
 
-router.get('/addLike', checkAuth, ActionUser.addLike)
+router.post('/addLike', checkAuth, ActionUser.addLike)
 
-router.get('/addDislike', checkAuth, ActionUser.addDislike)
+router.post('/addDislike', checkAuth, ActionUser.addDislike)
 
 router.post('/uploadVideo', fileMiddleware.single('file'), checkAuth, ActionUser.uploadVideo)
 
 router.delete('/removeMyVideo', checkAuth, ActionUser.removeMyVideo)
 
-router.get('/updateViews', ActionUser.updateViews)
+router.post('/updateViews', ActionUser.updateViews)
 
 router.post('/editMyVideo', upload.array(), checkAuth, ActionUser.editMyVideo)
 

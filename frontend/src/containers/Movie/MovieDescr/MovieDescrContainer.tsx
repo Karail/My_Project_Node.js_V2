@@ -24,23 +24,19 @@ type PropsType = {
 
 class MovieDescrContainer extends React.Component<PropsType> {
 
-    likeFunc = async () => {
+    updateScore = async (method: string) => {
         if (getCookie('token')) {
             const { serverURL, match, movie, updateLikeDislike } = this.props
-            const response = await fetch(`${serverURL}/addLike?id=${match.params.id}&dislike=${movie.video.dislike}&like=${movie.video.like}`, {
-                credentials: 'include',
-            })
-            const data = await response.json()
-            updateLikeDislike(data)
-        } else {
-            alert('Зарегистрируйтесь что бы добавить в избранное')
-        }
-    }
-
-    dislikeFunc = async () => {
-        if (getCookie('token')) {
-            const { serverURL, match, movie, updateLikeDislike } = this.props
-            const response = await fetch(`${serverURL}/addDislike?id=${match.params.id}&dislike=${movie.video.dislike}&like=${movie.video.like}`, {
+            const response = await fetch(`${serverURL}/${method}`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    id: match.params.id,
+                    dislike: movie.video.dislike,
+                    like: movie.video.like,
+                }),
                 credentials: 'include',
             })
             const data = await response.json()
@@ -53,7 +49,10 @@ class MovieDescrContainer extends React.Component<PropsType> {
     render() {
         return (
             <div>
-                <MovieDescr {...this.props} likeFunc={this.likeFunc} dislikeFunc={this.dislikeFunc} />
+                <MovieDescr
+                    {...this.props}
+                    updateScore={this.updateScore}
+                />
             </div>
         )
     }
