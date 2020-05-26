@@ -43,7 +43,7 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
 
         const previewAWS = await AWS.awsUploadFile(filePathPreview, req.file.filename, req.file.mimetype, '/video/preview')
 
-     
+
 
         const video = await Video.create({
             name,
@@ -86,12 +86,10 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
         // res.json(video)
         console.log('video')
 
-        if (!threads.isMainThread) {
-            threads.parentPort?.postMessage({
-                name: 'video',
-                msg: video.id
-            });
-        }
+        threads.parentPort?.postMessage({
+            name: 'video',
+            msg: video.id
+        });
 
     } catch (err) {
 
@@ -99,12 +97,10 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
 
         await transaction.rollback();
 
-        if (!threads.isMainThread) {
-            threads.parentPort?.postMessage({
-                name: 'err',
-                msg: err
-            });
-        }
+        threads.parentPort?.postMessage({
+            name: 'err',
+            msg: err
+        });
 
     } finally {
         await FileMethods.deleteFile(filePath)
