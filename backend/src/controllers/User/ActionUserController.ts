@@ -17,7 +17,7 @@ import {
     DislikeSubscriber,
     VideoCategory,
     VideoModel,
-    VideoStudio
+    VideoStudio,
 } from '../../models/control';
 
 class ActionUserController {
@@ -31,10 +31,17 @@ class ActionUserController {
             console.log(req.body);
 
 
-            if (!comment) return res.status(400).send({ message: 'Не корректные данные' })
+            if (!comment) 
+            return res.status(400).send({ message: 'Не корректные данные' })
 
-            const newConmment = await Comment.create({
-                name,
+            const user = await Subscriber.findOne({
+                where: {
+                    id: req.user.id,
+                }
+            })
+
+            await Comment.create({
+                name: user.name,
                 comment: comment.trim(),
                 video_id,
                 comment_id,

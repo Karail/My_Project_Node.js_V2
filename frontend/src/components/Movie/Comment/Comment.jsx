@@ -16,7 +16,7 @@ export const Comment = (props) => {
                     <button type="submit" className="btn-main" id="comment-btn">Отправить</button>
                 </form>
             </div>
-            <div className="main-article-content-video-commented-list scroll-style">
+            <div className="main-article-content-video-commented-list">
                 <CommentList
                     comments={movie.comment}
                     {...props}
