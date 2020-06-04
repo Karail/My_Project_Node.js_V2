@@ -4,7 +4,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWTconf } from '../../config/conf';
 import jwt from 'jsonwebtoken';
-import IUserRequest from '../interface/IUserRequest';
+import IUserRequest from '../interface/IUser-request.interface';
 
 function ExtractJwt(req: Request) {
     let token = null

@@ -1,6 +1,6 @@
 
 import { AWSconf } from '../../../config/conf';
-import s3 from '../../middleware/aws';
+import s3 from '../../middleware/aws.middleware';
 import FileMethods from './FileMethods';
 
 export default abstract class AWS {

@@ -1,5 +1,5 @@
 
-import ViewMain from '../../controllers/Main/ViewMainController'
+import ViewMain from '../../controllers/Main/view-main.controller'
 import { Router } from 'express';
 
 const router = Router()

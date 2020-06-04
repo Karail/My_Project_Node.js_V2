@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express'
 
-import ViewMethods from '../abstract/ViewMethods';
+import ViewMethods from '../../services/abstract/ViewMethods';
 import Bind from '../../decorators/Bind';
 
 import Sequelize from 'sequelize'

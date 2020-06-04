@@ -14,7 +14,7 @@ import { JWTconf } from '../../config/conf';
 import resetEmail from '../email/resetPassword'
 import transporter from '../email';
 
-import { TokenBodyType } from '../interface/IUserRequest';
+import { TokenBodyType } from '../interface/IUser-request.interface';
 import Bind from '../decorators/Bind';
 
 class AuthController {

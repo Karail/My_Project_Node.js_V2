@@ -1,9 +1,9 @@
 
 import threads from 'worker_threads';
-import FileMethods from '../controllers/abstract/FileMethods';
+import FileMethods from './abstract/FileMethods';
 import sequelize from '../../db/db';
-import IUserRequest from '../interface/IUserRequest';
-import AWS from '../controllers/abstract/AWS';
+import IUserRequest from '../interface/IUser-request.interface';
+import AWS from './abstract/AWS';
 import child_process from 'child_process';
 
 import {
@@ -102,10 +102,7 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
             msg: err
         });
 
-    } finally {
-        await FileMethods.deleteFile(filePath)
-        await FileMethods.deleteFile(filePathPreview)
-    }
+    } 
 }
 
 const {

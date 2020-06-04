@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express'
 import { Subscriber, Video } from '../../models/control';
-import IUserRequest from '../../interface/IUserRequest';
+import IUserRequest from '../../interface/IUser-request.interface';
 
 class ViewUserController {
 

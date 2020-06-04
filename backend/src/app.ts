@@ -2,10 +2,10 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
-import viewMainRouter from './routes/main/viewMain'
-import authRouter from './routes/auth'
-import viewUserRouter from './routes/user/viewUser'
-import actionUserRouter from './routes/user/actionUser'
+import viewMainRouter from './routes/main/view-main.router'
+import authRouter from './routes/auth.router'
+import viewUserRouter from './routes/user/view-user.router'
+import actionUserRouter from './routes/user/action-user.router'
 
 const app = express()
 app.use(helmet())
@@ -31,6 +31,6 @@ app.use(authRouter)
 app.use(viewUserRouter)
 app.use(actionUserRouter)
 //
-app.listen(8080, () => console.log('start worker'))
+app.listen(8081, () => console.log('start worker'))
 
 

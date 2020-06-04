@@ -1,9 +1,9 @@
 
-import ActionUser from '../../controllers/User/ActionUserController'
-import { checkAuth } from '../../middleware/auth'
+import ActionUser from '../../controllers/User/action-user.controller'
+import { checkAuth } from '../../middleware/auth.middleware'
 import { Router } from 'express';
 import multer from 'multer'
-import fileMiddleware from '../../middleware/multer'
+import fileMiddleware from '../../middleware/multer.middleware'
 const upload: any = multer()
 
 const router = Router()

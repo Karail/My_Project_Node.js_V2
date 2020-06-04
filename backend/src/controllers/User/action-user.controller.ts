@@ -6,8 +6,8 @@ const { getVideoDurationInSeconds } = require('get-video-duration')
 
 import sequelize from '../../../db/db';
 
-import IUserRequest from '../../interface/IUserRequest';
-import AWS from '../abstract/AWS';
+import IUserRequest from '../../interface/IUser-request.interface';
+import AWS from '../../services/abstract/AWS';
 
 import {
     Video,
@@ -19,6 +19,7 @@ import {
     VideoModel,
     VideoStudio,
 } from '../../models/control';
+import FileMethods from '../../services/abstract/FileMethods';
 
 class ActionUserController {
 
@@ -263,6 +264,10 @@ class ActionUserController {
     }
 
     async uploadVideo(req: IUserRequest, res: Response) {
+
+        const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
+        const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
+
         try {
             const { name } = req.body
 
@@ -271,9 +276,6 @@ class ActionUserController {
             } else if (!req.file) {
                 throw new Error('Загрузите файл');
             }
-
-            const filePath = path.join(__dirname, '..', '..', '..', req.file.path)
-            const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
 
             const duration: number = await getVideoDurationInSeconds(filePath)
 
@@ -305,8 +307,11 @@ class ActionUserController {
             });
 
         } catch (err) {
-            res.status(500).send({ message: err.message })
+            res.status(500).send(err)
             console.log(err)
+        } finally {
+            await FileMethods.deleteFile(filePath)
+            await FileMethods.deleteFile(filePathPreview)
         }
     }
 

@@ -1,6 +1,6 @@
 
-import VidewUser from '../../controllers/User/ViewUserController'
-import { checkAuth } from '../../middleware/auth'
+import VidewUser from '../../controllers/User/view-user.controller'
+import { checkAuth } from '../../middleware/auth.middleware'
 import { Router } from 'express'
 const router = Router()
 
