@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 
 import { MovieDescr } from '../../../components/Movie/MovieDescr/MovieDescr'
 import { getCookie } from '../../../func/cookie'
 
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as movieActions from '../../../redux/list/movie/movie.action'
+import * as movieActions from '../../../redux/list/movie/movie.action';
 
-import { updateLikeDislikeType } from '../../../redux/list/movie/movie.type'
+import { updateLikeDislikeType } from '../../../redux/list/movie/movie.type';
 import { likeDislikeType } from '../../../type/movie.type';
 
 import { rootReducerType } from '../../../redux/list'
@@ -24,9 +24,9 @@ type PropsType = {
 
 class MovieDescrContainer extends React.Component<PropsType> {
 
-    updateScore = async (method: string) => {
+    updateScore = async (method: 'addLike' | 'addDislike') => {
         if (getCookie('token')) {
-            const { serverURL, match, movie, updateLikeDislike } = this.props
+            const { serverURL, match, movie, updateLikeDislike } = this.props;
             const response = await fetch(`${serverURL}/${method}`, {
                 method: 'post',
                 headers: {
@@ -38,11 +38,26 @@ class MovieDescrContainer extends React.Component<PropsType> {
                     like: movie.video.like,
                 }),
                 credentials: 'include',
-            })
-            const data = await response.json()
-            updateLikeDislike(data)
+            });
+            const data = await response.json();
+            updateLikeDislike(data);
         } else {
-            alert('Зарегистрируйтесь')
+            alert('Зарегистрируйтесь');
+        }
+    }
+
+    complain = async () => {
+        if (getCookie('token')) {
+            const { serverURL, match } = this.props;
+            const response = await fetch(`${serverURL}/complain/${match.params.id}`, {
+                method: 'post',
+                credentials: 'include',
+            });
+            const data = await response.json();
+            console.log(data);
+            alert('Жалоба отправлена');
+        } else {
+            alert('Зарегистрируйтесь');
         }
     }
 
@@ -52,6 +67,7 @@ class MovieDescrContainer extends React.Component<PropsType> {
                 <MovieDescr
                     {...this.props}
                     updateScore={this.updateScore}
+                    complain={this.complain}
                 />
             </div>
         )
@@ -67,6 +83,6 @@ const mapStateToProps = ({ movie }: rootReducerType) => ({
 // передача action в компонент
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     ...bindActionCreators(movieActions, dispatch),
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieDescrContainer);

@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JWTconf } from '../../config/conf';
 import jwt from 'jsonwebtoken';
 import IUserRequest from '../interface/IUser-request.interface';
+import { Subscriber } from '../models/control';
 
 function ExtractJwt(req: Request) {
     let token = null
@@ -18,11 +19,14 @@ export function checkAuth(req: IUserRequest, res: Response, next: NextFunction) 
 
     const token = ExtractJwt(req);
 
-    jwt.verify(token, JWTconf.secretOrKey, (err: any, decoded: any) => {
+    jwt.verify(token, JWTconf.secretOrKey, async (err: any, decoded: any) => {
         if (err) {
             return res.status(401).send({ error: err });
         }
-        req.user = decoded;
+        
+        const user = await Subscriber.findByPk(decoded.id);
+
+        req.user = user;
         next();
     });
 }

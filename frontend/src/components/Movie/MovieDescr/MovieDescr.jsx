@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MovieDescr = ({ movie, updateScore }) => {
+export const MovieDescr = ({ movie, updateScore, complain }) => {
 
     const { video, category, tag, model, studio } = movie
 
@@ -62,6 +62,7 @@ export const MovieDescr = ({ movie, updateScore }) => {
                         }
                     </p>
                 </div>
+                <button onClick={complain} className="btn-main">Пожаловаться</button>
             </div>
         </div>
     )

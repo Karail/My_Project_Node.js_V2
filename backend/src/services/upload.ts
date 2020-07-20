@@ -93,8 +93,6 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
 
     } catch (err) {
 
-        console.log(err)
-
         await transaction.rollback();
 
         threads.parentPort?.postMessage({
@@ -102,7 +100,10 @@ async function uploadVideo(req: IUserRequest, filePath: string, filePathPreview:
             msg: err
         });
 
-    } 
+    } finally {
+        await FileMethods.deleteFile(filePath);
+        await FileMethods.deleteFile(filePathPreview);
+    }
 }
 
 const {

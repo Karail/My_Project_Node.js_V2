@@ -8,48 +8,49 @@ import Bind from '../../decorators/Bind';
 import Sequelize from 'sequelize'
 const Op = Sequelize.Op;
 
-import { Video, Category, Model, Studio, Tag, Comment } from '../../models/control';
+import { Video, Category, Model, Studio, Tag, Comment, VideoCategory } from '../../models/control';
+import { type } from 'os';
 
 class ViewMainController extends ViewMethods {
 
     @Bind
     showVideo(req: Request, res: Response) {
-        this.resVideoOffset(req, res)
+        this.resVideoOffset(req, res);
     }
 
     @Bind
     showCategory(_: Request, res: Response) {
-        this.resModel(res, Category)
+        this.resModel(res, Category);
     }
 
     @Bind
     showVideoCategory(req: Request, res: Response) {
-        this.resVideoOffset(req, res, Category, 'category_id')
+        this.resVideoOffset(req, res, Category, 'category_id');
     }
 
     @Bind
     showModel(_: Request, res: Response) {
-        this.resModel(res, Model)
+        this.resModel(res, Model);
     }
 
     @Bind
     showVideoModel(req: Request, res: Response) {
-        this.resVideoOffset(req, res, Model, 'model_id')
+        this.resVideoOffset(req, res, Model, 'model_id');
     }
 
     @Bind
     showStudio(_: Request, res: Response) {
-        this.resModel(res, Studio)
+        this.resModel(res, Studio);
     }
 
     @Bind
     showVideoStudio(req: Request, res: Response) {
-        this.resVideoOffset(req, res, Studio, 'studio_id')
+        this.resVideoOffset(req, res, Studio, 'studio_id');
     }
 
     @Bind
     showVideoTag(req: Request, res: Response) {
-        this.resVideoOffset(req, res, Tag, 'tag_id')
+        this.resVideoOffset(req, res, Tag, 'tag_id');
     }
 
     @Bind
@@ -60,22 +61,22 @@ class ViewMainController extends ViewMethods {
                 where: { id: req.params.id },
             })
 
-            const category = await this.resModelVideoId(req, Category)
+            const category = await this.resModelVideoId(req, Category);
 
-            const model = await this.resModelVideoId(req, Model)
+            const model = await this.resModelVideoId(req, Model);
 
-            const studio = await this.resModelVideoId(req, Studio)
+            const studio = await this.resModelVideoId(req, Studio);
 
-            const tag = await this.resModelVideoId(req, Tag)
+            const tag = await this.resModelVideoId(req, Tag);
 
             const comment = await Comment.findAll({
                 order: [['id', 'DESC']],
                 where: {
                     video_id: req.params.id
                 }
-            })
+            });
 
-            const recommended = await Video.findAll({
+            let recommended = await Video.findAll({
                 where: [
                     {
                         id: {
@@ -88,7 +89,34 @@ class ViewMainController extends ViewMethods {
                 replacements: {
                     name: video.name
                 }
-            })
+            });
+
+            for (const cat of category) {
+
+                let recommendedCategory = await Video.findAll({
+                    limit: 5,
+                    include: [{
+                        model: Category,
+                        through: {
+                            where: {
+                                category_id: cat.id
+                            }
+                        },
+                        required: true
+                    }],
+                    where: {
+                        private: false,
+                    },
+                });
+
+                recommended.push(...recommendedCategory);
+            }
+
+            recommended = recommended.filter((thing: any, index: number, self: any[]) =>
+            index === self.findIndex((t: any) => (
+              t.id === thing.id
+            ))
+          )
 
             res.json({
                 video,
@@ -98,18 +126,18 @@ class ViewMainController extends ViewMethods {
                 tag,
                 comment,
                 recommended
-            })
+            });
 
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            console.log(err);
+            res.status(500).send({ message: 'Что то пошло не так' });
         }
     }
 
     async showVideoSearch(req: Request, res: Response) {
 
-        const { offset, limit } = req.query
-        const { name } = req.params
+        const { offset, limit } = req.query;
+        const { name } = req.params;
 
         try {
             const items = await Video.findAll({
@@ -122,15 +150,15 @@ class ViewMainController extends ViewMethods {
                     },
                     private: false,
                 }
-            })
+            });
             const nextOffset = +offset + +limit
             res.json({
                 data: items,
                 nextOffset: nextOffset,
-            })
+            });
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            console.log(err);
+            res.status(500).send({ message: 'Что то пошло не так' });
         }
     }
 
@@ -150,10 +178,10 @@ class ViewMainController extends ViewMethods {
                 category,
                 model,
                 studio
-            })
+            });
         } catch (err) {
-            console.log(err)
-            res.status(500).send({ message: 'Что то пошло не так' })
+            console.log(err);
+            res.status(500).send({ message: 'Что то пошло не так' });
         }
     }
 }

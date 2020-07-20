@@ -9,6 +9,9 @@ import sequelize from '../../../db/db';
 import IUserRequest from '../../interface/IUser-request.interface';
 import AWS from '../../services/abstract/AWS';
 
+import complain from '../../email/complain'
+import transporter from '../../email';
+
 import {
     Video,
     Comment,
@@ -19,8 +22,6 @@ import {
     VideoModel,
     VideoStudio,
 } from '../../models/control';
-import FileMethods from '../../services/abstract/FileMethods';
-
 class ActionUserController {
 
     async addComment(req: IUserRequest, res: Response) {
@@ -33,13 +34,9 @@ class ActionUserController {
 
 
             if (!comment) 
-            return res.status(400).send({ message: 'Не корректные данные' })
+                return res.status(400).send({ message: 'Не корректные данные' })
 
-            const user = await Subscriber.findOne({
-                where: {
-                    id: req.user.id,
-                }
-            })
+            const user = req.user
 
             await Comment.create({
                 name: user.name,
@@ -54,7 +51,7 @@ class ActionUserController {
                 await Comment.update({
                     answer: 1,
                 }, {
-                    where: { id: req.body.comment_id }
+                    where: { id: comment_id }
                 })
             }
 
@@ -269,18 +266,16 @@ class ActionUserController {
         const filePathPreview = path.join(__dirname, '..', '..', '/uploads', '/preview', req.file.filename)
 
         try {
-            const { name } = req.body
-
-            if (!name) {
-                throw new Error('Нет названия');
-            } else if (!req.file) {
-                throw new Error('Загрузите файл');
-            }
 
             const duration: number = await getVideoDurationInSeconds(filePath)
 
             const newDuration = Math.round(duration / 2)
 
+            console.log({
+                body: req.body,
+                file: req.file,
+                user: req.user.get(),
+            })
             const worker = new Worker(
                 path.join(__dirname, '..', '..', 'services', 'upload.imp.js'),
                 {
@@ -288,7 +283,7 @@ class ActionUserController {
                         req: {
                             body: req.body,
                             file: req.file,
-                            user: req.user,
+                            user: req.user.get(),
                         },
                         filePath,
                         filePathPreview,
@@ -297,21 +292,21 @@ class ActionUserController {
                 }
             )
 
-            worker.on('message', msg => {
+            worker.on('message', (msg) => {
                 if (msg.name === 'video') {
+                    console.log(msg.msg)
                     res.json(msg.msg)
                 } 
                 else if (msg.name === 'err') {
+                    console.log(msg.msg)
                     res.status(500).send({ message: msg.msg })
+                    
                 }
             });
 
         } catch (err) {
-            res.status(500).send(err)
             console.log(err)
-        } finally {
-            await FileMethods.deleteFile(filePath)
-            await FileMethods.deleteFile(filePathPreview)
+            res.status(500).json(err);
         }
     }
 
@@ -488,6 +483,20 @@ class ActionUserController {
         }
     }
 
+    async complain(req: IUserRequest, res: Response) {
+        try {
+            const userEmail = 'karail-fokus@mail.ru';
+            const videoId = req.params.videoId;
+
+            console.log(userEmail)
+            await transporter.sendMail(complain(userEmail, videoId));
+
+            res.json('Жалоба отправлена')
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: 'Что то пошло не так' })
+        }
+    }
 }
 
 export default new ActionUserController
